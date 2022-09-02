@@ -1,6 +1,7 @@
 {
   "name": "opensea-project",
   "version": "0.1.0",
+  "proxy": "http://localhost:4000",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -9,12 +10,45 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@3rdweb/hooks": "^1.9.2",
+    "@chakra-ui/react": "^2.2.8",
+    "@emotion/react": "^11.10.0",
+    "@emotion/styled": "^11.10.0",
+    "@ethersproject/units": "^5.7.0",
+    "@sanity/client": "^3.3.3",
+    "@thirdweb-dev/sdk": "^2.3.38",
+    "@usedapp/core": "^1.1.5",
+    "@web3-react/core": "^6.1.9",
+    "@web3-react/injected-connector": "^6.0.7",
+    "axios": "^0.27.2",
+    "cors": "^2.8.5",
+    "ethers": "^5.7.0",
+    "framer-motion": "^7.2.0",
+    "http-proxy-middleware": "^2.0.6",
+    "nanoid": "^4.0.0",
     "next": "12.2.5",
+    "next-themes": "^0.2.0",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "react-easy-swipe": "^0.0.22",
+    "react-elastic-carousel": "^0.11.5",
+    "react-horizontal-scrolling-menu": "^3.2.0",
+    "react-icons": "^4.4.0",
+    "react-moralis": "^1.4.1",
+    "react-responsive-carousel": "^3.2.23",
+    "react-slick": "^0.29.0",
+    "react-slideshow-image": "^4.0.4",
+    "react-switch": "^7.0.0",
+    "react-youtube": "^9.0.3",
+    "styled-components": "^5.3.5",
+    "web3": "^1.7.5",
+    "web3modal": "^1.9.8"
   },
   "devDependencies": {
+    "autoprefixer": "^10.4.8",
     "eslint": "8.22.0",
-    "eslint-config-next": "12.2.5"
+    "eslint-config-next": "12.2.5",
+    "postcss": "^8.4.16",
+    "tailwindcss": "^3.1.8"
   }
 }
