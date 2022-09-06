@@ -1,26 +1,19 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import {FaRegMoon} from 'react-icons/fa'
-import {FiSun} from 'react-icons/fi'
-import {useState, useEffect} from 'react'
+import { useTheme } from 'next-themes'
 
 const styles = {
     moonIcon: `text-black ml-[40px] text-[32px] hover:text-[#8a939b] 2xl:ml-[50px]  dark:text-[#8a939b] dark:hover:text-white`,
     sunIcon: `text-black ml-[40px] text-[30px] hover:text-[#8a939b] 2xl:ml-[50px]  dark:text-[#8a939b] dark:hover:text-white`
 }
 
-function MoonIcon({theme, setTheme}) {
+function MoonIcon() {
+  const { theme, setTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
 
-    const [isNightMode, setIsNightMode] = useState(false)
+  useEffect(() => setMounted(true), [])
 
-    useEffect(() => {
-        const currentTheme = localStorage.getItem('theme')
-        if (currentTheme === 'light') {
-          setIsNightMode(false)
-        } else {
-          setIsNightMode(true)
-        }
-    }, [theme])
-
+  if (!mounted) return null
 
     const handleChange = () => {
         setTheme(theme === 'dark' ? 'light' : 'dark')
@@ -28,7 +21,7 @@ function MoonIcon({theme, setTheme}) {
 
   return (
     <div>
-        {theme === 'dark' ? <FiSun onClick={handleChange} className={styles.sunIcon}/> : <FaRegMoon onClick={handleChange} className={styles.moonIcon} />}
+        <FaRegMoon onClick={handleChange} className={styles.moonIcon} />
     </div>
   )
 }

@@ -1,36 +1,56 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { useRouter } from "next/router";
 import Header from "../../components/Header/Header";
 import { useTheme } from "next-themes";
-import fetchNfts from "../../hooks/fetchNfts";
-import fetchListings from "../../hooks/fetchListings";
 import NFTPageSmall from "../../components/Nfts/NFTPageSmall";
 import NFTPageLarge from "../../components/Nfts/NFTPageLarge";
 import { client } from "../../lib/sanityClient";
 import Footer from "../../components/Footer/Footer";
+import { useMarketplace } from "@thirdweb-dev/react";
+import { useNFTCollection } from "@thirdweb-dev/react";
 
 function nftPage() {
+  // const { provider } = useWeb3();
   const router = useRouter();
   const { theme, setTheme } = useTheme();
   const nftInfo = router.query;
   const { isListed, collectionAddress, id } = nftInfo;
   const [nfts, setNfts] = useState([]);
+  const [myModule, setMyModule] = useState("");
   const [listings, setListings] = useState([]);
   const [collection, setCollection] = useState([]);
   const [user, setUser] = useState("");
 
-  async function getNfts() {
-    const fetchedNfts = await fetchNfts(collectionAddress);
-    await setNfts(fetchedNfts);
-  }
+  const marketplace = useMarketplace(
+    "0x1De7A966aa3FC7d43bfA7Ae450AEF02600E9d5Db"
+  );
+  const nftCollection = useNFTCollection(collectionAddress);
 
-  async function getListings() {
-    const fetchedListings = await fetchListings();
-    await setListings(fetchedListings);
-  }
+  const getListings = async () => {
+    try {
+      const list = await marketplace.getActiveListings();
+      setListings(list);
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
-  getNfts();
-  getListings();
+  const getNfts = async () => {
+    try {
+      const myNfts = await nftCollection.getAll();
+      setNfts(myNfts);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getListings();
+  }, []);
+
+  useEffect(() => {
+    getNfts();
+  }, []);
 
   const nft = nfts.filter((nft) => nft.metadata.name === id);
   const listing = listings.filter((listing) => listing.asset.name === id);

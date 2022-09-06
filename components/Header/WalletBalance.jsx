@@ -12,6 +12,8 @@ import {IoIosCopy} from 'react-icons/io'
 import {AiOutlinePlusCircle} from 'react-icons/ai'
 import AddFundsComponent from './AddFundsComponent'
 import { useWeb3 } from "@3rdweb/hooks"
+import {useAddress, useSDK} from "@thirdweb-dev/react"
+
 
 function WalletBalance({ setWalletOpen}) {
     // const [ethBalance, setEthBalance] = useState()
@@ -19,8 +21,21 @@ function WalletBalance({ setWalletOpen}) {
     const [showCopy, setShowCopy] = useState(false)
     const [openSlide, setopenSlide] = useState("")
     const [showAddFunds, setShowAddFunds] = useState(false);
+    const [balance, setBalance] = useState(0)
 
-    const {address, balance} = useWeb3()
+    // const {address, balance} = useWeb3()
+    const sdk = useSDK()
+    async function getBalance() {
+        const myBalance = await sdk.wallet.balance();
+        setBalance(myBalance.displayValue)
+    }
+
+    useEffect(() => {
+        if (!sdk) return
+        getBalance()
+    }, [address])
+
+    const address = useAddress()
 
     const styles = {
         wrapper: `absolute h-full w-full`,
@@ -49,12 +64,13 @@ function WalletBalance({ setWalletOpen}) {
 
     }
 
-
+    console.log(balance)
     const catMenu = useRef(null)
 
     // useEffect(() => {
     //     setEthBalance(balance)
     // }, [address])
+
 
     async function fetchEthPrice() {
         try {
@@ -108,7 +124,7 @@ function WalletBalance({ setWalletOpen}) {
             </div>
             <div className={styles.topContainerLayout}>
                 <div className={styles.ethBalanceRight}>
-                    <h2 className={styles.ethAmountRight}>{balance === undefined ? "..." : balance.formatted}</h2>
+                    <h2 className={styles.ethAmountRight}>{balance === undefined ? "..." : parseFloat(balance).toFixed(4)}</h2>
                     <p className={styles.usdAmountRight}>{ethPrice === undefined ? "..." : "$" + (ethPrice*balance.formatted).toFixed(2) + " " + "USD"}</p>
                 </div>
  

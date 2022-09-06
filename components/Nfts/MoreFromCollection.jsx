@@ -1,6 +1,6 @@
 import React, {useMemo, useState} from 'react'
 import { ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu';
-import {MdOutlineKeyboardArrowDown} from "react-icons/md"
+import {MdOutlineKeyboardArrowDown, MdOutlineKeyboardArrowUp} from "react-icons/md"
 import {BsCollection} from 'react-icons/bs'
 import ScrollNFTCard from './ScrollNFTCard'
 import Router from 'next/router'
@@ -64,15 +64,16 @@ function MoreFromCollection({allNfts, allListings}) {
 
   return (
     <div>
-      <div onClick={() => setShowMoreFromCollection(prev => !prev)} className="flex items-center border-[1px] px-[20px] py-[20px] mt-[5px] justify-between cursor-pointer">
+      <div onClick={() => setShowMoreFromCollection(prev => !prev)} className="lg:p-[25px] dark:bg-[#262b2f] dark:text-[#d3d5d7] dark:border-0 flex items-center border-[1px] px-[20px] py-[20px] mt-[5px] justify-between cursor-pointer">
             <div className="flex">
-                <BsCollection className="mr-[10px] text-[24px]"/>
-                <p className="font-semibold">More From This Collection</p>
+                <BsCollection className="mr-[10px] text-[26px]"/>
+                <p className="font-semibold lg:text-[18px]">More From This Collection</p>
             </div>
-            <MdOutlineKeyboardArrowDown className="text-[26px] text-[rgba(0,0,0,0.5)]"/>
+            {!showMoreFromCollection && <MdOutlineKeyboardArrowDown className="text-[26px] text-[rgba(0,0,0,0.5)] dark:text-[#8a939b]"/>}
+            {showMoreFromCollection && <MdOutlineKeyboardArrowUp className="text-[26px] text-[rgba(0,0,0,0.5)] dark:text-[#8a939b]"/>}
       </div>
       {showMoreFromCollection && <ScrollMenu>
-        <div className="flex ">
+        <div className="flex gap-[10px] mt-[10px]">
           {scrollCards}
         </div>
       </ScrollMenu>}

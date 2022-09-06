@@ -3,8 +3,8 @@ import TransferDiv from './TransferDiv'
 
 function ActivityCard() {
   return (
-    <div className="bg-[#fbfdff] pb-[10px]">
-        <div className="flex p-[20px] text-[14px] w-[580px] bg-white border-[1px] lg:w-[650px]">
+    <div className="bg-[#fbfdff] pb-[10px] dark:bg-[#262b2f] ">
+        <div className="flex p-[20px] text-[14px] w-[580px] bg-white border-[1px] lg:w-[650px] dark:bg-[#262b2f] dark:border-0">
             <div className="w-[130px]">Event</div>
             <div className="w-[130px]">Price</div>
             <div className="w-[130px]">From</div>

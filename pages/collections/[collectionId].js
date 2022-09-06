@@ -1,36 +1,50 @@
 import React from "react";
-import { ThirdwebSDK } from "@thirdweb-dev/sdk";
-import { useWeb3 } from "@3rdweb/hooks";
 import { useRouter } from "next/router";
 import { useMemo, useEffect, useState } from "react";
 import Header from "../../components/Header/Header";
 import { client } from "../../lib/sanityClient";
 import CollectionData from "../../components/Collections/CollectionData";
 import { useTheme } from "next-themes";
-import fetchNfts from "../../hooks/fetchNfts";
-import fetchListings from "../../hooks/fetchListings";
+import { useMarketplace } from "@thirdweb-dev/react";
+import { useNFTCollection } from "@thirdweb-dev/react";
 
 function Collection() {
   const router = useRouter();
   const { theme, setTheme } = useTheme();
   const { collectionId } = router.query;
-  const { provider } = useWeb3();
   const [nfts, setNfts] = useState([]);
   const [listings, setListings] = useState([]);
   const [collection, setCollection] = useState([]);
 
-  async function getNfts() {
-    const fetchedNfts = await fetchNfts(collectionId);
-    await setNfts(fetchedNfts);
-  }
+  const marketplace = useMarketplace(
+    "0x1De7A966aa3FC7d43bfA7Ae450AEF02600E9d5Db"
+  );
 
-  async function getListings() {
-    const fetchedListings = await fetchListings();
-    await setListings(fetchedListings);
-  }
+  const getListings = async () => {
+    try {
+      const list = await marketplace.getAll();
+      setListings(list);
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
-  getNfts();
-  getListings();
+  useEffect(() => {
+    getListings();
+  }, []);
+
+  const nftCollection = useNFTCollection(
+    "0xa9d524c82a5e5530AE26Ae194f8caCE75C8097F4"
+  );
+
+  const getNfts = async () => {
+    try {
+      const myNfts = await nftCollection.getAll();
+      setNfts(myNfts);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const fetchCollectionData = async () => {
     const query = `*[_type == "marketItems" && contractAddress == "${collectionId}"] {
@@ -49,12 +63,18 @@ function Collection() {
     }`;
 
     const collectionData = await client.fetch(query);
-    await setCollection(collectionData[0]);
+    setCollection(collectionData[0]);
   };
 
   useMemo(() => {
     fetchCollectionData();
   }, [collectionId]);
+
+  useEffect(() => {
+    getNfts();
+  }, []);
+
+  console.log(listings);
 
   return (
     <div>

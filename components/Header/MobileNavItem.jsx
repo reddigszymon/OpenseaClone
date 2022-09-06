@@ -9,6 +9,8 @@ const styles = {
 }
 
 function MobileNavItem({children, text, theme, setTheme, destination, isLink}) {
+
+
   return (
     <>
       {isLink && <Link href={`${destination}`}>

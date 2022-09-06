@@ -7,16 +7,17 @@ import {BsMoonFill} from "react-icons/bs"
 import MobileNavItem from './MobileNavItem'
 import ConnectButton from './ConnectButton'
 import Footer from "./Footer"
-import {useWeb3} from "@3rdweb/hooks"
+// import {useWeb3} from "@3rdweb/hooks"
 import {BsCollection} from "react-icons/bs"
 import Link from "next/link"
+import {useAddress} from "@thirdweb-dev/react"
 
 
 
 function Navbar({theme, setTheme, setWalletOpen}) {
 
-    const {address} = useWeb3()
-
+    // const {address} = useWeb3()
+    const address = useAddress()
 
 const styles = {
     icon: `text-3xl mr-[.3em]`

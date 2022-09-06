@@ -1,22 +1,15 @@
 import "../styles/globals.css";
-import { ThirdwebWeb3Provider } from "@3rdweb/hooks";
+import { chainId, ThirdwebProvider } from "@thirdweb-dev/react";
 import { ThemeProvider } from "next-themes";
-
-const supportedChainIds = [5];
-const connectors = {
-  injected: {},
-};
+import { ChainId } from "@usedapp/core";
 
 function MyApp({ Component, pageProps }) {
   return (
-    <ThemeProvider attribute="class">
-      <ThirdwebWeb3Provider
-        supportedChainIds={supportedChainIds}
-        connectors={connectors}
-      >
+    <ThirdwebProvider desiredChainId={ChainId.Goerli}>
+      <ThemeProvider attribute="class">
         <Component {...pageProps} />
-      </ThirdwebWeb3Provider>
-    </ThemeProvider>
+      </ThemeProvider>
+    </ThirdwebProvider>
   );
 }
 

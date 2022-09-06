@@ -2,8 +2,10 @@ import React from 'react'
 
 function NFTCard({image, price, id, isListed}) {
   return (
-    <div className="shadow-md p-[10px] rounded-lg hover:shadow-2xl cursor-pointer hover:scale-105 dark:bg-[rgb(53,56,64)]">
-        <img src={image}/>
+    <div className="shadow-sm hover:shadow-md p-[10px] rounded-lg cursor-pointer dark:bg-[rgb(53,56,64)]">
+      <div className="overflow-hidden rounded-lg">
+            <img src={image} className="hover:scale-[1.15] lg:hover:ease-in-out lg:duration-[400ms]"/>
+        </div>
         <div className="font-poppins font-semibold text-[12px] mt-[10px]">
             {id}
         </div>

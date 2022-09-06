@@ -3,7 +3,7 @@ import {TbArrowsLeftRight} from 'react-icons/tb'
 
 function TransferDiv({price, from, to, date}) {
   return (
-    <div className="flex items-center border-[1px] p-[20px]">
+    <div className="flex items-center border-[1px] p-[20px] dark:border-0">
             <div className="flex items-center w-[106px] lg:w-[121.6px]">
               <TbArrowsLeftRight className="mr-[8px]"/>
               <p className="font-poppins text-[14px]">Transfer</p>

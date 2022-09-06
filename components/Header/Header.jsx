@@ -14,16 +14,21 @@ import MoonIcon from './MoonIcon'
 import WalletBalance from "./WalletBalance"
 import Link from "next/link"
 import {useWeb3} from "@3rdweb/hooks"
+import Router from 'next/router'
+import { useTheme  } from "next-themes";
+import {useAddress, useMetamask} from "@thirdweb-dev/react"
 
-function Header({theme, setTheme}) {
+
+function Header() {
 
     const [navbarOpen, setNavbarOpen] = useState(false)
     const [smallSearch, setSmallSearch] = useState(false)
     const [walletOpen, setWalletOpen] = useState(false)
+    const { theme, setTheme } = useTheme()
 
     const styles = {
         wrapper: `shadow-lg w-full bg-white dark:bg-[#04111d] px-[1.2rem] py-[16px] flex`,
-        logo: `flex justify-center items-center  `,
+        logo: `flex justify-center items-center cursor-pointer`,
         logoText: `text-black dark:text-white font-bold text-2xl ml-[.6em] mr-[1em] `,
         icons: `sm:flex-1 text-white text-3xl flex items-center justify-center ml-auto cursor-pointer`,
         largeText: `2xl:ml-[2.5em] 2xl:text-[3xl] ml-[20px] text-black dark:text-[#aab0b5] hover:text-[#8a939b] dark:hover:text-white`,
@@ -44,7 +49,9 @@ function Header({theme, setTheme}) {
         walletStyling: `z-40 bg-white fixed w-full lg:w-[50%] h-screen transition-all ease-in duration-300 dark:bg-[rgb(32,34,37)] ${walletOpen ? "translate-x-[0]" : "translate-x-[100%]"} ${walletOpen ? "lg:translate-x-[100%]" : "lg:translate-x-[200%]"}`
     }
 
-    const {address, connectWallet} = useWeb3()
+
+    const address = useAddress()
+    const connectWallet = useMetamask()
 
 
     if (typeof window !== "undefined") {
@@ -59,10 +66,10 @@ function Header({theme, setTheme}) {
   return (
     <>
     <div className={styles.wrapper}>
-        <a href="/" className={styles.logo}>
+        <div onClick={() => Router.push({pathname: '/'})} className={styles.logo}>
             <Image src={openseaLogo} height={40} width={40}></Image>
             <div className={styles.logoText}>OpenSea</div>
-        </a>
+        </div>
         <div className={styles.icons}>
             <div className={styles.navbarContainer}>
                 <div className={styles.searchIconSpace}>
@@ -71,9 +78,10 @@ function Header({theme, setTheme}) {
                 <input className={styles.input} placeholder="Search items, collections and accounts"></input>
             </div>
             <div className={styles.bigScreenNavbar}>
-                <a href="/collections/0x38b526b3E50b01ba2EC7db94F2D782F8d59F52BF" className={styles.largeText}>Collections</a>
-                <a href="/stats" className={styles.largeText}>Stats</a>
-                <a href="/create" className={styles.largeText}>Create</a>
+                {/* <div onClick={() => Router.push({pathname: '/collections/0xa9d524c82a5e5530AE26Ae194f8caCE75C8097F4'})} className={styles.largeText}>Collections</div> */}
+                <Link href='/collections/0xa9d524c82a5e5530AE26Ae194f8caCE75C8097F4'><span className={styles.largeText}>Collections</span></Link>
+                <div onClick={() => Router.push({pathname: '/stats'})} className={styles.largeText}>Stats</div>
+                <div onClick={() => Router.push({pathname: '/create'})} className={styles.largeText}>Create</div>
                 <MoonIcon theme={theme} setTheme={setTheme}/>
             </div>
             <div className={styles.bigScreenIcons}>
