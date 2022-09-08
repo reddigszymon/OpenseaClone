@@ -21,14 +21,17 @@ function NFTPageSmall({nft, listing, collection, username, allNfts, allListings}
   const address = useAddress()
 
   const [isOwner, setIsOwner] = useState(false)
+  const [favourite, setFavourite] = useState(false)
+  const [listingsFiltered, setListingsFiltered] = useState([])
 
   let {isListed, collectionAddress, id} = router.query;
   
-  const price = listing.length < 1 ? 0 : listing[0].buyoutCurrencyValuePerToken.displayValue
+  const price = listing.length < 1 ? "" : listing[0].buyoutCurrencyValuePerToken.displayValue
   const imageUrl = nft.length < 1 ? "" : nft[0].metadata.image
   const title = collection == undefined ? "" : collection.title
   const name = nft.length < 1 ? "" : nft[0].metadata.name
   const collectionAvatar = collection == undefined ? "" : collection.imageUrl
+  const collectionDescription = collection == undefined ? "" : collection.description
   const nftId = listing.length < 1 ? "" : listing[0].id
   const sellerAddress = listing.length < 1 ? "" : listing[0].sellerAddress
   const marketplace = useMarketplace(
@@ -79,13 +82,25 @@ function NFTPageSmall({nft, listing, collection, username, allNfts, allListings}
     }
   }, [address, sellerAddress])
 
+  useEffect(() => {
+    if (allListings !== undefined) {
+        let array = []
+        for (let i=0; i<allListings.length; i++) {
+            if (allListings[i].assetContractAddress === collectionAddress) {
+                array.push(allListings[i])
+            }
+        }
+        setListingsFiltered(array)
+    }
+}, [allListings, address])
+
 
   return (
     <div className="p-[10px] font-poppins max-w-[600px] mx-auto">
       <Toaster position="top-center" reverseOrder={false} />
         <div className="flex items-center justify-between ">
           <div className="flex items-center mr-[15px]">
-            <div className="text-[#2081e2] mr-[5px] w-[175px] cursor-pointer" onClick={() => {
+            <div className="text-[#2081e2] mr-[5px] cursor-pointer" onClick={() => {
             Router.push({
                 pathname: `/collections/${collectionAddress}`,
             })
@@ -112,10 +127,14 @@ function NFTPageSmall({nft, listing, collection, username, allNfts, allListings}
         <div className="border-[1px] rounded-xl dark:border-0">
           <div className="py-[10px] text-[#676767] flex justify-between items-center dark:bg-[#303339] dark:rounded-t-lg">
             <FaEthereum className="ml-[10px] dark:text-[#8a939b]"/>
-            <div className="flex items-center">
+            {!favourite && <div className="flex items-center">
               <p className="text-[14px] text-[rgba(0,0,0,0.4)] dark:text-[#8a939b]">168</p>
-              <BsHeart className="mr-[10px] ml-[10px] cursor-pointer dark:text-[#8a939b]"/>
-            </div>
+              <BsHeart className="mr-[10px] ml-[10px] cursor-pointer dark:text-[#8a939b]" onClick={() => setFavourite(prev => !prev)}/>
+            </div>}
+            {favourite && <div className="flex items-center">
+              <p className="text-[14px] text-[rgba(0,0,0,0.4)] dark:text-[#8a939b]">168</p>
+              <BsFillHeartFill className="mr-[10px] ml-[10px] cursor-pointer text-[red]" onClick={() => setFavourite(prev => !prev)}/>
+            </div>}
           </div>
           <div className="w-full h-auto max-w-[580px] ">
             <img className="w-full h-full" src={imageUrl}></img>
@@ -153,10 +172,10 @@ function NFTPageSmall({nft, listing, collection, username, allNfts, allListings}
             <p>Make Offer</p>
           </button>
         </div>}
-        <NftDescription collectionAvatar={collectionAvatar}/>
+        <NftDescription collectionAvatar={collectionAvatar} description={collectionDescription}/>
         <Details />
         <ItemActivity />
-        <MoreFromCollection allNfts={allNfts} allListings={allListings}/>
+        <MoreFromCollection allNfts={allNfts} allListings={listingsFiltered}/>
     </div>
   )
 }

@@ -5,13 +5,16 @@ import {useState} from 'react'
 import useWindowDimensions from "../../hooks/useWindowDimensions"
 import NFTCards from "./NFTCards"
 import {IoIosArrowDown, IoIosArrowUp} from 'react-icons/io'
+import { useRouter } from "next/router";
+import { useNFTCollection } from "@thirdweb-dev/react";
+import {useAddress} from "@thirdweb-dev/react"
 
 
 const styles = {
     wrapper: `overflow-hidden dark:bg-[rgb(32,34,37)]`,
     imageWrapper: `relative h-[20vh] sm:h-[25vh] lg:h-[30vh] w-screen`,
     avatarDiv: `absolute bg-white dark:bg-[rgb(32,34,37)] dark: p-[1px] rounded-lg top-[75%] left-[20px] sm:top-[60%] shadow-lg 2xl:left-[60px]`,
-    logo: `relative h-[82px] w-[82px] sm:w-[112px] sm:h-[112px] lg:w-[168px] lg:h-[168px] 2xl:w-[200px] 2xl:h-[200px]`,
+    logo: `border-[6px] border-white dark:border-[rgb(32,34,37)] border-lg relative h-[82px] w-[82px] sm:w-[112px] sm:h-[112px] lg:w-[168px] lg:h-[168px] 2xl:w-[200px] 2xl:h-[200px]`,
     iconsWrapper: `2xl:px-[50px]`,
     icons: `flex items-center w-full justify-end p-[30px] cursor-pointer`,
     titleWrapper: `flex items-center ml-[20px] mb-[10px] 2xl:mt-[30px]`,
@@ -36,22 +39,85 @@ const styles = {
 }
 
 
-function CollectionData({bannerImageUrl, imageUrl, title, company, description, nfts, allOwners, volumeTraded, listings}) {
+function CollectionData({bannerImageUrl, imageUrl, title, company, description, allOwners, volumeTraded, listings}) {
 
     const [showText, setShowText] = useState(false)
     const {width, height} = useWindowDimensions()
     const [floor, setFloor] = useState(0)
+    const [numOwners, setNumOwners] = useState(0)
+    const [creator, setCreator] = useState(false)
+    const [listingsFiltered, setListingsFiltered] = useState([])
+    const [nfts, setNfts] = useState([])
+
+    const router = useRouter();
+    const { collectionId } = router.query;
+    const nftCollection = useNFTCollection(collectionId);
+    const address = useAddress()
+
+    let floorPrice
+    let ownerArray = []
 
     useEffect(() => {
-        if (floor === 0 && listings.length > 0) {
-            setFloor(listings[0].buyoutCurrencyValuePerToken.displayValue)
+        if (listingsFiltered === undefined) {
+            floorPrice = 0
         }
-        listings.map(listing => {
-            if (listing.buyoutCurrencyValuePerToken.displayValue <= floor ) {
-                setFloor(listing.buyoutCurrencyValuePerToken.displayValue)
+        if (listingsFiltered !== undefined) {
+            floorPrice = 100000000
+            listingsFiltered.map(listing => {
+                if (parseFloat(listing.buyoutCurrencyValuePerToken.displayValue) <= floorPrice ) {
+                    floorPrice = parseFloat(listing.buyoutCurrencyValuePerToken.displayValue)
+                }
+            })
+            if (floorPrice < 10000) {
+                setFloor(floorPrice)
+            }
+        }
+    }, [nfts, listingsFiltered])
+
+    useEffect(() => {
+        if (company !== undefined && company !== null) {
+            setCreator(true)
+        }
+    })
+
+    async function grabOwners() {
+        if (nfts === undefined) return
+        nfts.forEach(nft => {
+            if (!ownerArray.includes(nft.owner)) {
+                ownerArray.push(nft.owner)
             }
         })
-    }, [listings, nfts])
+        setNumOwners(ownerArray.length)
+    }
+
+    useEffect(() => {
+        grabOwners()
+    }, [nfts, address])
+
+    useEffect(() => {
+        if (listings !== undefined) {
+            let array = []
+            for (let i=0; i<listings.length; i++) {
+                if (listings[i].assetContractAddress === collectionId) {
+                    array.push(listings[i])
+                }
+            }
+            setListingsFiltered(array)
+        }
+    }, [listings, address])
+
+    const getNfts = async () => {
+        try {
+          const myNfts = await nftCollection.getAll();
+          setNfts(myNfts);
+        } catch (error) {
+          console.log(error);
+        }
+      };
+
+    useEffect(() => {
+        getNfts();
+      }, [address]);
 
 
   return (
@@ -73,12 +139,14 @@ function CollectionData({bannerImageUrl, imageUrl, title, company, description, 
                 <h1 className={styles.title}>{title}</h1>
                 <BsFillPatchCheckFill size={20} color="rgb(32, 129, 226)"/>
             </div>
-            <div className={styles.companyWrapper}>
+            {creator && <div className={styles.companyWrapper}>
                 <p className={styles.companyStyling}>
-                    {"By " + company}
+                    <div>
+                        {"By " + company}
+                    </div>
                 </p>
                 <BsFillPatchCheckFill size={14} color="rgb(32, 129, 226)"/>
-            </div>
+            </div>}
             <div className={styles.seeMore}>
                 <div>
                     {!showText && (description == undefined ? ".." : description.slice(0,Math.round(width/8)) + '...')}
@@ -101,13 +169,13 @@ function CollectionData({bannerImageUrl, imageUrl, title, company, description, 
                     <p className={styles.numberBottom}>items</p>
                 </div>
                 <div className={styles.infoDiv}>
-                    <p className={styles.numberTop}>{allOwners == undefined ? "..." : allOwners.length}</p>
+                    <p className={styles.numberTop}>{numOwners}</p>
                     <p className={styles.numberBottom}>owners</p>
                 </div>
                 <div className={styles.infoDiv}>
                     <div className={styles.volumeDiv}>
                         <img className={styles.ethImage} src="https://openseauserdata.com/files/6f8e2979d428180222796ff4a33ab929.svg" />
-                        {volumeTraded + 'K'}
+                        {volumeTraded}
                     </div>
                     <p className={styles.bottomText}>total volume</p>
                 </div>
@@ -131,7 +199,7 @@ function CollectionData({bannerImageUrl, imageUrl, title, company, description, 
             <div className="dark:hidden">
                 <hr/>
             </div>
-            <NFTCards listings={listings} nfts={nfts}/>
+            <NFTCards listings={listingsFiltered} nfts={nfts}/>
         </div>
         
     </div>

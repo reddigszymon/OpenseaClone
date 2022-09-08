@@ -47,6 +47,12 @@ export default createSchema({
             title: "Instagram Handle",
             type: "string",
           },
+          {
+            name: "fav",
+            title: "fav",
+            type: "array",
+            of: [{ type: "string" }],
+          },
         ],
       },
       {

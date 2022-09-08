@@ -10,12 +10,15 @@ function NFTCards({nfts, listings}) {
     const router = useRouter()
     const [canRender, setCanRender] = useState(false)
     const {collectionId} = router.query
+    let minPrice = 100000
 
     useEffect(() => {
-        if (listings == undefined || listings.length === 0) {
+        if (listings === undefined || nfts === undefined) {
             setCanRender(false)
         } else {
-            setCanRender(true)
+            setTimeout(() => {
+                setCanRender(true)
+            }, 5000)
         }
     }, [listings, nfts])
 
@@ -31,9 +34,21 @@ function NFTCards({nfts, listings}) {
         }
     }
 
+    let sortedListings = []
+
+    for (var oneListing in listings) {
+        sortedListings.push(listings[oneListing])
+    }
+
+    sortedListings.sort(function(a,b) {
+        return parseFloat(a.buyoutCurrencyValuePerToken.displayValue) - parseFloat(b.buyoutCurrencyValuePerToken.displayValue);
+    })
+    
+    console.log({listings, sortedListings})
+
   return (
     <div className="flex flex-wrap mt-[10px]">
-        {listings.map(listing => (
+        {sortedListings.map(listing => (
                 <div onClick={() => {
                     Router.push({
                         pathname: `/nfts/${listing.asset.name}`,

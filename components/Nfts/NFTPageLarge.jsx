@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useMemo} from 'react'
 import { useRouter } from "next/router";
 import {MdRefresh} from 'react-icons/md'
 import {RiShareBoxFill} from 'react-icons/ri'
@@ -16,15 +16,21 @@ import toast, { Toaster } from 'react-hot-toast'
 
 
 
+
 function NFTPageLarge({nft, listing, collection, username, allNfts, allListings, module}) {
 
-  const [isOwner, setIsOwner] = useState(false)
+  const [isListingOwner, setIsListingOwner] = useState(false)
+  const [isNftOwner, setIsNftOwner] = useState(false)
+  const [sellerPrice, setSellerPrice] = useState(0)
+  const [favourite, setFavourite] = useState(false);
+  const [listingsFiltered, setListingsFiltered] = useState([])
+
 
   const router = useRouter()
 
   const address = useAddress()
   let {isListed, collectionAddress, id} = router.query;
-  const price = listing.length < 1 ? 0 : listing[0].buyoutCurrencyValuePerToken.displayValue
+  const price = listing.length < 1 ? "" : listing[0].buyoutCurrencyValuePerToken.displayValue
   const imageUrl = nft.length < 1 ? "" : nft[0].metadata.image
   const title = collection == undefined ? "" : collection.title
   const name = nft.length < 1 ? "" : nft[0].metadata.name
@@ -51,13 +57,32 @@ function NFTPageLarge({nft, listing, collection, username, allNfts, allListings,
     },
   })
 
+  const confirmCreation = (toastHandler = toast) =>
+  toastHandler.success(`Listing has been created!`, {
+    style: {
+      background: '#04111d',
+      color: '#fff',
+    },
+  })
+
   useEffect(() => {
     if (sellerAddress === address) {
-      setIsOwner(true)
+      setIsListingOwner(true)
     } else {
-      setIsOwner(false)
+      setIsListingOwner(false)
     }
   }, [address, sellerAddress])
+
+  useEffect(() => {
+    if (nft[0] !== undefined) {
+      if (nft[0].owner === address) {
+        setIsNftOwner(true)
+      } else {
+        setIsNftOwner(false)
+      }
+    }
+    
+  }, [address, nft])
 
   if (isListed === "true") {
     isListed = true
@@ -67,17 +92,65 @@ function NFTPageLarge({nft, listing, collection, username, allNfts, allListings,
 
   async function buyNow() {
     if (marketplace !== undefined) {
-      await marketplace.buyoutListing(nftId, 1)
+      await marketplace.direct.buyoutListing(nftId, 1)
       confirmPurchase()
     }
   }
 
   async function cancelListing() {
     if (marketplace !== undefined) {
-      await marketplace.cancelListing(nftId)
+      await marketplace.direct.cancelListing(nftId)
       confirmCancelling()
     }
   }
+
+  async function createListing() {
+    if (nft[0] !== undefined) {
+      const listing = {
+        assetContractAddress: collectionAddress,
+        tokenId: nft[0].metadata.id,
+        startTimestamp: new Date(),
+        listingDurationInSeconds: 86400,
+        quantity: 1,
+        currencyContractAddress: "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+        buyoutPricePerToken: sellerPrice
+      }
+      await marketplace.direct.createListing(listing)
+      confirmCreation()
+    }
+  }
+
+  useEffect(() => {
+    if (allListings !== undefined) {
+        let array = []
+        for (let i=0; i<allListings.length; i++) {
+            if (allListings[i].assetContractAddress === collectionAddress) {
+                array.push(allListings[i])
+            }
+        }
+        setListingsFiltered(array)
+    }
+}, [allListings])
+
+  // const addFavourite = () => {
+  //   if (nft === undefined || nft.length < 1 || !address) return
+  //   const nftUri = nft[0].metadata.uri;
+  //   // const isFavourited = checkFavourite(nftUri)
+  //   // console.log(isFavourited)
+  //   // if (isFavourited) {
+  //   //   client
+  //   //     .patch(address)
+  //   //     .unset([nftUri])
+  //   //     .commit()
+  //   // } else {
+  //     client
+  //       .patch(address)
+  //       .setIfMissing({fav: []})
+  //       .insert('before', 'fav[0]', [nftUri])
+  //       .commit({autoGenerateArrayKeys: true})
+  //   // }
+  // }
+
 
   return (
     <>
@@ -87,10 +160,14 @@ function NFTPageLarge({nft, listing, collection, username, allNfts, allListings,
         <div className="dark:border-0 border-[1px] rounded-xl mb-[20px] dark:bg-[#303339]">
              <div className="py-[10px] text-[#676767] flex justify-between items-center">
                <FaEthereum className="ml-[10px] dark:text-[#8a939b]"/>
-               <div className="flex items-center">
+               {!favourite && <div className="flex items-center">
                  <p className="text-[14px] text-[rgba(0,0,0,0.4)] dark:text-[#8a939b]">168</p>
-                 <BsHeart className="mr-[10px] ml-[10px] cursor-pointer dark:text-[#8a939b]"/>
-               </div>
+                 <BsHeart className="mr-[10px] ml-[10px] cursor-pointer dark:text-[#8a939b]" onClick={() => setFavourite(prev => !prev)}/>
+               </div>}
+               {favourite && <div className="flex items-center">
+                 <p className="text-[14px] text-[rgba(0,0,0,0.4)] dark:text-[#8a939b]">168</p>
+                 <BsFillHeartFill className="mr-[10px] ml-[10px] cursor-pointer text-[red]" onClick={() => setFavourite(prev => !prev)}/>
+               </div>}
              </div>
              <div className="w-full h-auto max-w-[580px] ">
                <img className="w-full h-full" src={imageUrl}></img>
@@ -104,7 +181,7 @@ function NFTPageLarge({nft, listing, collection, username, allNfts, allListings,
       <div className="flex flex-col w-[650px] ml-[30px]">
         <div className="flex items-center justify-between ">
             <div className="flex items-center mr-[15px]">
-              <div className="text-[#2081e2] mr-[5px] w-[175px] cursor-pointer" onClick={() => {
+              <div className="text-[#2081e2] mr-[5px] cursor-pointer" onClick={() => {
               Router.push({
                   pathname: `/collections/${collectionAddress}`,
               })
@@ -129,7 +206,8 @@ function NFTPageLarge({nft, listing, collection, username, allNfts, allListings,
             <h1 className="font-semibold text-[30px] mb-[20px] dark:text-[#e5e8eb]">{"#" + name}</h1>
           </div>
           <div className="mt-[20px] items-center flex justify-between">
-           <div className="dark:text-[#e5e8eb]">Owned by <span className="text-[#2081e2]">{username == undefined ? "" : username.userName}</span></div>
+           {!isNftOwner && <div className="dark:text-[#e5e8eb]">Owned by <span className="text-[#2081e2]">{username == undefined ? "" : username.userName}</span></div>}
+           {isNftOwner && <div className="dark:text-[#e5e8eb]">Owned by <span className="text-[#2081e2]">You</span></div>}
            <div className="flex items-center">
              <BsFillHeartFill className="text-[gray] text-[20px]"/> 
              <p className="ml-[10px] text-[rgba(0,0,0,0.5)] dark:text-[#e5e8eb]">168 favorites</p>
@@ -143,11 +221,11 @@ function NFTPageLarge({nft, listing, collection, username, allNfts, allListings,
             <div className="text-[30px] font-semibold dark:text-[#d3d5d7]">{price}</div>
           </div>
 
-          {!isOwner && <button onClick={() => buyNow()} className="bg-[#2081e2] hover:bg-[#2b87e3] text-white mt-[5px] w-full p-[15px] text-[16px] rounded-lg font-semibold flex items-center justify-center">
+          {!isListingOwner && <button onClick={() => buyNow()} className="bg-[#2081e2] hover:bg-[#2b87e3] text-white mt-[5px] w-full p-[15px] text-[16px] rounded-lg font-semibold flex items-center justify-center">
             <MdAccountBalanceWallet className="text-[24px] mr-[10px]"/>
             <p>Buy now</p>
           </button>}
-          {isOwner && <button onClick={() => cancelListing()} className="bg-[#2081e2] hover:bg-[#2b87e3] text-white mt-[5px] w-full p-[15px] text-[16px] rounded-lg font-semibold flex items-center justify-center">
+          {isListingOwner && <button onClick={() => cancelListing()} className="bg-[#2081e2] hover:bg-[#2b87e3] text-white mt-[5px] w-full p-[15px] text-[16px] rounded-lg font-semibold flex items-center justify-center">
             <ImCross className="text-[24px] mr-[10px]"/>
             <p>Cancel Listing</p>
           </button>}
@@ -155,16 +233,25 @@ function NFTPageLarge({nft, listing, collection, username, allNfts, allListings,
         {!isListed && 
         <div className="border-[1px] rounded-lg p-[10px] mt-[20px] bg-[#fbfdff] dark:bg-[#303339] dark:border-0 ">
           <div className="text-[18px] text-[rgba(0,0,0,0.5)] dark:text-[#e5e8eb]">Item is not listed</div> 
-          <button className="bg-[#2081e2] hover:bg-[#2b87e3] text-white mt-[5px] w-full p-[15px] text-[16px] rounded-lg font-semibold flex items-center justify-center">
+          {!isNftOwner && <button className="bg-[#2081e2] hover:bg-[#2b87e3] text-white mt-[5px] w-full p-[15px] text-[16px] rounded-lg font-semibold flex items-center justify-center">
             <MdAccountBalanceWallet className="text-[24px] mr-[10px]"/>
             <p>Make Offer</p>
-          </button>
+          </button>}
+          {isNftOwner && 
+          <div className="flex justify-between items-center mt-[5px]">
+            <input onChange={(e) => setSellerPrice(e.target.value)} placeholder="Price of NFT" className="border-2 dark:border-0 w-[20%] rounded-l-lg h-[48px] p-[10px] text-[14px] placeholder:text-center outline-none placeholder:text-[#434444] dark:text-[#e5e8eb]"/>
+            <button onClick={() => createListing()} className="bg-[#2081e2] hover:bg-[#2b87e3] text-white  w-[80%] p-[12px] text-[16px] rounded-r-lg font-semibold flex items-center justify-center">
+              <MdAccountBalanceWallet className="text-[24px] mr-[10px]"/>
+              <p>Sell</p>
+            </button>
+          </div>
+          }
         </div>}
         <ItemActivity />
         </div>
     </div>
     <div className="max-w-[1260px] mx-auto mb-[5px] px-[10px]">
-      <MoreFromCollection allNfts={allNfts} allListings={allListings}/>
+      <MoreFromCollection allNfts={allNfts} allListings={listingsFiltered}/>
     </div>
     </>
   )

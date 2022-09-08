@@ -5,12 +5,12 @@ import NotableDrops from "../components/NotableDrops/NotableDrops";
 import TopCollections from "../components/TopCollections/TopCollections";
 import MeetOpensea from "../components/MeetOpensea/MeetOpensea";
 import Footer from "../components/Footer/Footer";
-import { useWeb3React } from "@web3-react/core";
 import { useEffect } from "react";
 import { client } from "../lib/sanityClient";
+import { useAddress } from "@thirdweb-dev/react";
 
 export default function Home() {
-  const { account, library } = useWeb3React();
+  const account = useAddress();
   const { theme, setTheme } = useTheme();
 
   useEffect(() => {

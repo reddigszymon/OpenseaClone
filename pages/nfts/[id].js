@@ -8,9 +8,10 @@ import { client } from "../../lib/sanityClient";
 import Footer from "../../components/Footer/Footer";
 import { useMarketplace } from "@thirdweb-dev/react";
 import { useNFTCollection } from "@thirdweb-dev/react";
+import { useAddress } from "@thirdweb-dev/react";
 
 function nftPage() {
-  // const { provider } = useWeb3();
+  const address = useAddress();
   const router = useRouter();
   const { theme, setTheme } = useTheme();
   const nftInfo = router.query;
@@ -46,11 +47,11 @@ function nftPage() {
 
   useEffect(() => {
     getListings();
-  }, []);
+  }, [address]);
 
   useEffect(() => {
     getNfts();
-  }, []);
+  }, [address]);
 
   const nft = nfts.filter((nft) => nft.metadata.name === id);
   const listing = listings.filter((listing) => listing.asset.name === id);
@@ -59,6 +60,7 @@ function nftPage() {
     const query = `*[_type == "marketItems" && contractAddress == "${collectionAddress}"] {
       "imageUrl": profileImage.asset->url,
        title,
+      description,
     }`;
 
     const collectionData = await client.fetch(query);
