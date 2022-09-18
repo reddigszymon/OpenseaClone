@@ -40,10 +40,10 @@ function MoreFromCollection({allNfts, allListings}) {
   useMemo(populateNfts, [router.query, showMoreFromCollection])
 
 
-  const scrollCards = scrollingNfts.map(nft => {
+  const scrollCards = scrollingNfts.map((nft, index) => {
     return (
-      <div className="min-w-[178px] min-h-[260px] max-w-[240px] max-h-[360px] sm600:w-[370px] 
-      sm600:h-[488px] sm600:max-w-[550px] sm600:max-h-[678px] lg:max-w-[300px] lg:max-h-[415px]" 
+      <div className="min-w-[178px] min-h-[270px] max-w-[240px] max-h-[370px] sm600:w-[370px] 
+       sm600:max-w-[280px] sm600:max-h-[500px] sm:max-w-[280px] lg:max-w-[250px] lg:max-h-[430px]" 
       onClick={() => {
         Router.push({
             pathname: `/nfts/${nft.asset === undefined ? nft.metadata.name : nft.asset.name}`,
@@ -55,7 +55,7 @@ function MoreFromCollection({allNfts, allListings}) {
         price={nft.asset === undefined ? "" : nft.buyoutCurrencyValuePerToken.displayValue}
         id={nft.asset === undefined ? nft.metadata.name : nft.asset.name}
         isListed = {nft.asset === undefined ? false : true}
-        key = {nft.asset === undefined ? nft.metadata.name : nft.asset.name}
+        key = {index}
         />
       </div>
     )

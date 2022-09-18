@@ -13,7 +13,6 @@ import SmallSearch from "./SmallSearch"
 import MoonIcon from './MoonIcon'
 import WalletBalance from "./WalletBalance"
 import Link from "next/link"
-import {useWeb3} from "@3rdweb/hooks"
 import Router from 'next/router'
 import { useTheme  } from "next-themes";
 import {useAddress, useMetamask} from "@thirdweb-dev/react"
@@ -78,8 +77,7 @@ function Header() {
                 <input className={styles.input} placeholder="Search items, collections and accounts"></input>
             </div>
             <div className={styles.bigScreenNavbar}>
-                {/* <div onClick={() => Router.push({pathname: '/collections/0xa9d524c82a5e5530AE26Ae194f8caCE75C8097F4'})} className={styles.largeText}>Collections</div> */}
-                <Link href='/collections/0xa9d524c82a5e5530AE26Ae194f8caCE75C8097F4'><span className={styles.largeText}>Collections</span></Link>
+                <Link href='/explore-collections'><span className={styles.largeText}>Collections</span></Link>
                 <div onClick={() => Router.push({pathname: '/stats'})} className={styles.largeText}>Stats</div>
                 <div onClick={() => Router.push({pathname: '/create'})} className={styles.largeText}>Create</div>
                 <MoonIcon theme={theme} setTheme={setTheme}/>
@@ -87,7 +85,7 @@ function Header() {
             <div className={styles.bigScreenIcons}>
                 {
                 address ?
-                <Link href="/profile"> 
+                <Link href={"/profile/" + address}> 
                     <div className={styles.greenCircle}>
                         <Image layout='fill' objectFit='cover' src={greenCircle}/>
                     </div> 

@@ -15,6 +15,7 @@ export default function Home() {
 
   useEffect(() => {
     if (!account) return;
+
     const addAddress = async () => {
       const userDoc = {
         _type: "users",

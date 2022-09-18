@@ -13,6 +13,8 @@ import MoreFromCollection from './MoreFromCollection'
 import Router from 'next/router'
 import { useMarketplace, useAddress } from "@thirdweb-dev/react";
 import toast, { Toaster } from 'react-hot-toast'
+import Link from "next/link"
+
 
 
 
@@ -24,6 +26,7 @@ function NFTPageLarge({nft, listing, collection, username, allNfts, allListings,
   const [sellerPrice, setSellerPrice] = useState(0)
   const [favourite, setFavourite] = useState(false);
   const [listingsFiltered, setListingsFiltered] = useState([])
+  const [profileRedirect, setProfileRedirect] = useState()
 
 
   const router = useRouter()
@@ -37,6 +40,7 @@ function NFTPageLarge({nft, listing, collection, username, allNfts, allListings,
   const collectionAvatar = collection == undefined ? "" : collection.imageUrl
   const nftId = listing.length < 1 ? "" : listing[0].id
   const sellerAddress = listing.length < 1 ? "" : listing[0].sellerAddress
+  const collectionDescription = collection == undefined ? "" : collection.description
   const marketplace = useMarketplace(
     "0x1De7A966aa3FC7d43bfA7Ae450AEF02600E9d5Db"
   );
@@ -130,26 +134,16 @@ function NFTPageLarge({nft, listing, collection, username, allNfts, allListings,
         }
         setListingsFiltered(array)
     }
-}, [allListings])
+}, [address, allListings])
 
-  // const addFavourite = () => {
-  //   if (nft === undefined || nft.length < 1 || !address) return
-  //   const nftUri = nft[0].metadata.uri;
-  //   // const isFavourited = checkFavourite(nftUri)
-  //   // console.log(isFavourited)
-  //   // if (isFavourited) {
-  //   //   client
-  //   //     .patch(address)
-  //   //     .unset([nftUri])
-  //   //     .commit()
-  //   // } else {
-  //     client
-  //       .patch(address)
-  //       .setIfMissing({fav: []})
-  //       .insert('before', 'fav[0]', [nftUri])
-  //       .commit({autoGenerateArrayKeys: true})
-  //   // }
-  // }
+useEffect(() => {
+  if (listing[0] !== undefined) {
+    setProfileRedirect(listing[0].sellerAddress)
+  }
+  if (nft[0] !== undefined) {
+    setProfileRedirect(nft[0].owner)
+  }
+}, [address, nft, listing])
 
 
   return (
@@ -174,7 +168,7 @@ function NFTPageLarge({nft, listing, collection, username, allNfts, allListings,
              </div>
           </div>
           <div className="mb-[1px]">
-            <NftDescription collectionAvatar={collectionAvatar}/>
+            <NftDescription collectionAvatar={collectionAvatar} description={collectionDescription}/>
           </div>
           <Details />
       </div>
@@ -206,7 +200,7 @@ function NFTPageLarge({nft, listing, collection, username, allNfts, allListings,
             <h1 className="font-semibold text-[30px] mb-[20px] dark:text-[#e5e8eb]">{"#" + name}</h1>
           </div>
           <div className="mt-[20px] items-center flex justify-between">
-           {!isNftOwner && <div className="dark:text-[#e5e8eb]">Owned by <span className="text-[#2081e2]">{username == undefined ? "" : username.userName}</span></div>}
+           {!isNftOwner && <div className="dark:text-[#e5e8eb]">Owned by <span className="text-[#2081e2]"><Link href={"/profile/" + profileRedirect}><a>{username === undefined ? "Unnamed" : username.userName}</a></Link></span></div>}
            {isNftOwner && <div className="dark:text-[#e5e8eb]">Owned by <span className="text-[#2081e2]">You</span></div>}
            <div className="flex items-center">
              <BsFillHeartFill className="text-[gray] text-[20px]"/> 

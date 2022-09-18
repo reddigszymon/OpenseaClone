@@ -48,6 +48,7 @@ function CollectionData({bannerImageUrl, imageUrl, title, company, description, 
     const [creator, setCreator] = useState(false)
     const [listingsFiltered, setListingsFiltered] = useState([])
     const [nfts, setNfts] = useState([])
+    const [isVerified, setIsVerified] = useState(false)
 
     const router = useRouter();
     const { collectionId } = router.query;
@@ -119,6 +120,15 @@ function CollectionData({bannerImageUrl, imageUrl, title, company, description, 
         getNfts();
       }, [address]);
 
+    useEffect(() => {
+        if (company !== null && company !== undefined) {
+            if (!company.slice(0,2) == '0x') {
+                setIsVerified(true)
+            }
+
+        }
+    }, [company])
+
 
   return (
     <div className={styles.wrapper}>
@@ -137,7 +147,7 @@ function CollectionData({bannerImageUrl, imageUrl, title, company, description, 
             </div>
             <div className={styles.titleWrapper}>
                 <h1 className={styles.title}>{title}</h1>
-                <BsFillPatchCheckFill size={20} color="rgb(32, 129, 226)"/>
+                {isVerified && <BsFillPatchCheckFill size={20} color="rgb(32, 129, 226)"/>}
             </div>
             {creator && <div className={styles.companyWrapper}>
                 <p className={styles.companyStyling}>
@@ -145,7 +155,7 @@ function CollectionData({bannerImageUrl, imageUrl, title, company, description, 
                         {"By " + company}
                     </div>
                 </p>
-                <BsFillPatchCheckFill size={14} color="rgb(32, 129, 226)"/>
+                {isVerified && <BsFillPatchCheckFill size={14} color="rgb(32, 129, 226)"/>}
             </div>}
             <div className={styles.seeMore}>
                 <div>

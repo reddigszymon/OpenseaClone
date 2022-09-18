@@ -3,7 +3,7 @@ import {MdOutlineSubject, MdOutlineKeyboardArrowDown, MdOutlineKeyboardArrowUp} 
 
 function NftDescription({collectionAvatar, description}) {
 
-    const [showDescription, setShowDescription] = useState(false)
+    const [showDescription, setShowDescription] = useState(false);
   return (
     <>
         <div onClick={() => setShowDescription(prev => !prev)} className="dark:text-[#d3d5d7] dark:bg-[#262b2f] dark:border-0 flex items-center border-[1px] p-[20px] lg:p-[25px] mt-[5px] justify-between cursor-pointer">

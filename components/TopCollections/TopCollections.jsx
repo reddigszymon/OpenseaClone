@@ -25,9 +25,15 @@ function TopCollections() {
           <div onClick={() => Router.push({pathname: '/collections/0x8d82385a1f7e2252341108075Ff4B13684A8bf03'})}>
             <Collection id="2" collectionName="CryptoPunks" floorPrice="-" percentage="-65,33%" volume="12 838,96" image={cryptopunk}/>
           </div>
-          <Collection id="3" collectionName="The Potatoz" floorPrice="1.13" percentage="-25,12%" volume="11 671,44" image={potatoz}/>
-          <Collection id="4" collectionName="Otherdeeds" floorPrice="1.62" percentage="-49,87%" volume="10 840,56" image={otherdeeds}/>
-          <Collection id="5" collectionName="Mutant Ape Yacht Club" floorPrice="12.37" percentage="-28,64%" volume="9858,83" image={mayc}/>
+          <div onClick={() => Router.push({pathname: '/collections/0x2F9867cd403bc4284Db385E9f2Cc6dBb0510C41b'})}>
+            <Collection id="3" collectionName="The Potatoz" floorPrice="1.13" percentage="-25,12%" volume="11 671,44" image={potatoz}/>
+          </div>
+          <div onClick={() => Router.push({pathname: '/collections/0xEE579123BB5E7633751dD19C46c42cb3628B6fF5'})}>
+            <Collection id="4" collectionName="Otherdeeds" floorPrice="1.62" percentage="-49,87%" volume="10 840,56" image={otherdeeds}/>
+          </div>
+          <div onClick={() => Router.push({pathname: '/collections/0xFe9d5c1405A7E6fA45587fE9b0EcE6902Fb286C3'})}>
+            <Collection id="5" collectionName="Mutant Ape Yacht Club" floorPrice="12.37" percentage="-28,64%" volume="9858,83" image={mayc}/>
+          </div>
           <Collection id="6" collectionName="Moonbirds" floorPrice="13.45" percentage="-4,48%" volume="7551,85" image={moonbirds}/>
           <CollectionUp id="7" collectionName="Bored Apepe YC" floorPrice="0.56" percentage="+20,5%" volume="6771,52" image={apepe} />
           <CollectionUp id="8" collectionName="Lady Ape Club" floorPrice="0.6" percentage="+3922,22%" volume="6141,31" image={ladyape}/>
@@ -41,10 +47,16 @@ function TopCollections() {
         </div>
         <div onClick={() => Router.push({pathname: '/collections/0x8d82385a1f7e2252341108075Ff4B13684A8bf03'})}>
             <Collection id="2" collectionName="CryptoPunks" floorPrice="-" percentage="-65,33%" volume="12 838,96" image={cryptopunk} color="red"/>
-          </div>
+        </div>
+        <div onClick={() => Router.push({pathname: '/collections/0x2F9867cd403bc4284Db385E9f2Cc6dBb0510C41b'})}>
             <Collection id="3" collectionName="The Potatoz" floorPrice="1.13" percentage="-25,12%" volume="11 671,44" image={potatoz} color="red"/>
+        </div>
+        <div onClick={() => Router.push({pathname: '/collections/0xEE579123BB5E7633751dD19C46c42cb3628B6fF5'})}>
             <Collection id="4" collectionName="Otherdeeds" floorPrice="1.62" percentage="-49,87%" volume="10 840,56" image={otherdeeds} color="red"/>
+        </div>
+        <div onClick={() => Router.push({pathname: '/collections/0xFe9d5c1405A7E6fA45587fE9b0EcE6902Fb286C3'})}>
             <Collection id="5" collectionName="Mutant Ape Yacht Club" floorPrice="12.37" percentage="-28,64%" volume="9858,83" image={mayc} color="red"/>
+        </div>
         </div>
         <div className="dark:bg-[#202225] pt-[3em] hidden lg:block">
           <Collection id="6" collectionName="Moonbirds" floorPrice="13.45" percentage="-4,48%" volume="7551,85" image={moonbirds} color="red"/>

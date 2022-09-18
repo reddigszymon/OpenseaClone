@@ -43,8 +43,6 @@ function NFTCards({nfts, listings}) {
     sortedListings.sort(function(a,b) {
         return parseFloat(a.buyoutCurrencyValuePerToken.displayValue) - parseFloat(b.buyoutCurrencyValuePerToken.displayValue);
     })
-    
-    console.log({listings, sortedListings})
 
   return (
     <div className="flex flex-wrap mt-[10px]">

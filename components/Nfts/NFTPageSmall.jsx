@@ -14,6 +14,7 @@ import MoreFromCollection from './MoreFromCollection'
 import Router from 'next/router'
 import {useAddress} from "@thirdweb-dev/react"
 import toast, { Toaster } from 'react-hot-toast'
+import Link from "next/link"
 
 
 function NFTPageSmall({nft, listing, collection, username, allNfts, allListings}) {
@@ -23,6 +24,7 @@ function NFTPageSmall({nft, listing, collection, username, allNfts, allListings}
   const [isOwner, setIsOwner] = useState(false)
   const [favourite, setFavourite] = useState(false)
   const [listingsFiltered, setListingsFiltered] = useState([])
+  const [profileRedirect, setProfileRedirect] = useState()
 
   let {isListed, collectionAddress, id} = router.query;
   
@@ -94,6 +96,14 @@ function NFTPageSmall({nft, listing, collection, username, allNfts, allListings}
     }
 }, [allListings, address])
 
+useEffect(() => {
+  if (listing[0] !== undefined) {
+    setProfileRedirect(listing[0].sellerAddress)
+  }
+  if (nft[0] !== undefined) {
+    setProfileRedirect(nft[0].owner)
+  }
+}, [address, nft, listing])
 
   return (
     <div className="p-[10px] font-poppins max-w-[600px] mx-auto">
@@ -141,7 +151,7 @@ function NFTPageSmall({nft, listing, collection, username, allNfts, allListings}
           </div>
         </div>
         <div className="mt-[20px] items-center flex justify-between">
-          <div className="dark:text-[#8a939b]">Owned by <span className="text-[#2081e2]">{username == undefined ? "" : username.userName}</span></div>
+          <div className="dark:text-[#8a939b]">Owned by <span className="text-[#2081e2]"><Link href={"/profile/" + profileRedirect}><a>{username == undefined ? "" : username.userName}</a></Link></span></div>
           <div className="flex items-center">
             <BsFillHeartFill className="text-[gray] text-[20px]"/> 
             <p className="ml-[10px] text-[rgba(0,0,0,0.5)] dark:text-[#8a939b]">168 favorites</p>
