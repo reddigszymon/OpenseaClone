@@ -7,6 +7,8 @@ import { useNFTCollection } from "@thirdweb-dev/react";
 import { useRouter } from "next/router";
 import { useAddress } from "@thirdweb-dev/react";
 import { useMarketplace } from "@thirdweb-dev/react";
+import Footer from "../../components/Footer/Footer";
+import axios from "axios";
 
 export async function getServerSideProps(context) {
   const { wallet } = context.query;
@@ -20,22 +22,36 @@ export async function getServerSideProps(context) {
      userName,
   }`;
 
+  const searchQuery = `*[_type == "marketItems"]  {
+    title,
+    "imageUrl": profileImage.asset->url,
+    contractAddress
+  }`;
+
+  let res = await axios.get(
+    "https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?CMC_PRO_API_KEY=8cdc4749-80b3-4fd7-8076-1a337c193e78"
+  );
+
   const data = await client.fetch(query);
   const userData = await client.fetch(userQuery);
+  const searchData = await client.fetch(searchQuery);
   return {
     props: {
       data,
       userData,
+      searchData,
+      ethPrice: res.data,
     },
   };
 }
 
-function profile({ data, userData }) {
+function profile({ data, userData, searchData, ethPrice }) {
   const [nfts, setNfts] = useState([]);
   const [iter, setIter] = useState(0);
   const [allNfts, setAllNfts] = useState([]);
   const [canRender, setCanRender] = useState(false);
   const [listings, setListings] = useState();
+  const [titles, setTitles] = useState([]);
 
   const router = useRouter();
   const { wallet } = router.query;
@@ -44,6 +60,14 @@ function profile({ data, userData }) {
   const marketplace = useMarketplace(
     "0x1De7A966aa3FC7d43bfA7Ae450AEF02600E9d5Db"
   );
+
+  useEffect(() => {
+    let titleArray = [];
+    for (let i = 0; i < searchData.length; i++) {
+      titleArray.push(searchData[i].title);
+    }
+    setTitles(titleArray);
+  }, [data]);
 
   if (data[0] !== undefined) {
     for (let i = 0; i < data.length; i++) {
@@ -78,7 +102,7 @@ function profile({ data, userData }) {
       setAllNfts(endNfts);
       setCanRender(true);
     }
-  }, [nfts]);
+  }, [nfts, wallet]);
 
   const getListings = async () => {
     try {
@@ -91,13 +115,18 @@ function profile({ data, userData }) {
 
   useEffect(() => {
     getListings();
-  }, [address]);
+  }, [address, wallet]);
 
   return (
-    <div>
-      <Header />
+    <div className="overflow-x-hidden">
+      <Header
+        titles={titles}
+        fullData={searchData}
+        etherPrice={ethPrice.data[1].quote.USD.price}
+      />
       <UserImages userData={userData} />
       <UserInfo nfts={allNfts} listings={listings} userData={userData} />
+      <Footer />
     </div>
   );
 }

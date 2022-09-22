@@ -4,11 +4,10 @@ import wallet from "../../assets/wallet.png"
 import Image from 'next/image'
 import {AiOutlineArrowDown, AiOutlineInfoCircle} from 'react-icons/ai'
 import {useState} from "react"
-import {useWeb3} from "@3rdweb/hooks"
 
-function AddFundsComponent({setShowAddFunds}) {
+function AddFundsComponent({setShowAddFunds, address}) {
     const [showCopied, setShowCopied] = useState(false)
-    const {address} = useWeb3()
+
     function handleCopy() {
         navigator.clipboard.writeText(address)
         setShowCopied(true)

@@ -22,7 +22,7 @@ function UserImages({userData}) {
     if (wallet === address) {
       setIsOwner(true)
     }
-  }, [address])
+  }, [address, wallet])
 
   const handleEditBanner = async (event) => {
     setActiveBanner(URL.createObjectURL(event.target.files[0]))
@@ -59,7 +59,7 @@ function UserImages({userData}) {
         }
       }}).commit()
     }
-  }, [newAvatarAsset])
+  }, [newAvatarAsset, wallet])
 
   useEffect(() => {
     if (newBannerAsset !== undefined) {
@@ -71,7 +71,7 @@ function UserImages({userData}) {
         }
       }}).commit()
     }
-  }, [newBannerAsset])
+  }, [newBannerAsset, wallet])
 
   return (
     <div className="relative">

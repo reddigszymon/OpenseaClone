@@ -11,7 +11,7 @@ import {useAddress} from "@thirdweb-dev/react"
 
 
 const styles = {
-    wrapper: `overflow-hidden dark:bg-[rgb(32,34,37)]`,
+    wrapper: `overflow-hidden dark:bg-[rgb(32,34,37)] pb-[20px]`,
     imageWrapper: `relative h-[20vh] sm:h-[25vh] lg:h-[30vh] w-screen`,
     avatarDiv: `absolute bg-white dark:bg-[rgb(32,34,37)] dark: p-[1px] rounded-lg top-[75%] left-[20px] sm:top-[60%] shadow-lg 2xl:left-[60px]`,
     logo: `border-[6px] border-white dark:border-[rgb(32,34,37)] border-lg relative h-[82px] w-[82px] sm:w-[112px] sm:h-[112px] lg:w-[168px] lg:h-[168px] 2xl:w-[200px] 2xl:h-[200px]`,
@@ -93,7 +93,7 @@ function CollectionData({bannerImageUrl, imageUrl, title, company, description, 
 
     useEffect(() => {
         grabOwners()
-    }, [nfts, address])
+    }, [nfts, address, collectionId])
 
     useEffect(() => {
         if (listings !== undefined) {
@@ -105,7 +105,7 @@ function CollectionData({bannerImageUrl, imageUrl, title, company, description, 
             }
             setListingsFiltered(array)
         }
-    }, [listings, address])
+    }, [listings, address, collectionId])
 
     const getNfts = async () => {
         try {
@@ -118,7 +118,7 @@ function CollectionData({bannerImageUrl, imageUrl, title, company, description, 
 
     useEffect(() => {
         getNfts();
-      }, [address]);
+      }, [address, collectionId]);
 
     useEffect(() => {
         if (company !== null && company !== undefined) {
@@ -127,7 +127,7 @@ function CollectionData({bannerImageUrl, imageUrl, title, company, description, 
             }
 
         }
-    }, [company])
+    }, [company, collectionId])
 
 
   return (

@@ -21,7 +21,7 @@ function Hero() {
         authorAvatar: `cursor-pointer relative h-[40px] w-[40px] overflow-hidden rounded-full m-4`,
         collectionName: `relative text-sm font-semibold`,
         collectionAuthor: `relative text-[#2081e2] font-semibold text-sm`,
-        authorInfo: `relative cursor-pointer ml-auto mr-[1em] text-2xl dark:text-[#8A939B]`,
+        authorInfo: `relative ml-auto mr-[1em] text-2xl dark:text-[#8A939B]`,
         
     }
   return (
@@ -31,21 +31,25 @@ function Hero() {
                 <div className={styles.mainTitle}>Discover, collect, and sell extraordinary<br/> NFTs</div>
                 <div className={styles.subTitle}>OpenSea is the world's first and largest NFT marketplace</div>
                 <div className={styles.buttonContainer}>
-                    <button className={styles.buttonExplore}>Explore</button>
-                    <button className={styles.buttonCreate}>Create</button>
+                    <button className={styles.buttonExplore}><Link href="/explore-collections">Explore</Link></button>
+                    <button className={styles.buttonCreate}><Link href="/create">Create</Link></button>
                 </div>
                 <div className="hidden lg:block ">
                     <LearnMore />
                 </div>
             </div>
             <div className={styles.cardContainer}>
-                <div className={styles.image}>
-                    <Image layout='fill' objectFit='cover' src={heroPicture} />
-                </div>
-                <div className={styles.imageInfo}>
-                    <div className={styles.authorAvatar}>
-                        <Image layout='fill' objectFit='cover' src={heroAuthor} />
+                <a href="https://opensea.io/assets/ethereum/0xabab5e32166872605b371aeb0601a6d024ba47c5/1">
+                    <div className={styles.image}>
+                        <Image layout='fill' objectFit='cover' src={heroPicture} />
                     </div>
+                </a>
+                <div className={styles.imageInfo}>
+                    <a href="https://opensea.io/assets/ethereum/0xabab5e32166872605b371aeb0601a6d024ba47c5/1">
+                        <div className={styles.authorAvatar}>
+                            <Image layout='fill' objectFit='cover' src={heroAuthor} />
+                        </div>
+                    </a>
                     <div className="relative">
                         <p className={styles.collectionName}>xookt 1/1</p>
                         <a className={styles.collectionAuthor} href="https://opensea.io/assets/ethereum/0xabab5e32166872605b371aeb0601a6d024ba47c5/1">Nic_Hamilton</a>

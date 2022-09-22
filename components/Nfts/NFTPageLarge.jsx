@@ -14,9 +14,9 @@ import Router from 'next/router'
 import { useMarketplace, useAddress } from "@thirdweb-dev/react";
 import toast, { Toaster } from 'react-hot-toast'
 import Link from "next/link"
-
-
-
+import { trackPromise} from 'react-promise-tracker';
+import { usePromiseTracker } from "react-promise-tracker";
+import MoonLoader from "react-spinners/MoonLoader";
 
 
 function NFTPageLarge({nft, listing, collection, username, allNfts, allListings, module}) {
@@ -44,6 +44,7 @@ function NFTPageLarge({nft, listing, collection, username, allNfts, allListings,
   const marketplace = useMarketplace(
     "0x1De7A966aa3FC7d43bfA7Ae450AEF02600E9d5Db"
   );
+  const { promiseInProgress } = usePromiseTracker();
 
   const confirmPurchase = (toastHandler = toast) =>
   toastHandler.success(`Purchase successful!`, {
@@ -75,7 +76,7 @@ function NFTPageLarge({nft, listing, collection, username, allNfts, allListings,
     } else {
       setIsListingOwner(false)
     }
-  }, [address, sellerAddress])
+  }, [address, sellerAddress, collectionAddress])
 
   useEffect(() => {
     if (nft[0] !== undefined) {
@@ -86,7 +87,7 @@ function NFTPageLarge({nft, listing, collection, username, allNfts, allListings,
       }
     }
     
-  }, [address, nft])
+  }, [address, nft, collectionAddress])
 
   if (isListed === "true") {
     isListed = true
@@ -134,7 +135,7 @@ function NFTPageLarge({nft, listing, collection, username, allNfts, allListings,
         }
         setListingsFiltered(array)
     }
-}, [address, allListings])
+}, [address, allListings, collectionAddress])
 
 useEffect(() => {
   if (listing[0] !== undefined) {
@@ -143,7 +144,7 @@ useEffect(() => {
   if (nft[0] !== undefined) {
     setProfileRedirect(nft[0].owner)
   }
-}, [address, nft, listing])
+}, [address, nft, listing, collectionAddress])
 
 
   return (
@@ -201,7 +202,7 @@ useEffect(() => {
           </div>
           <div className="mt-[20px] items-center flex justify-between">
            {!isNftOwner && <div className="dark:text-[#e5e8eb]">Owned by <span className="text-[#2081e2]"><Link href={"/profile/" + profileRedirect}><a>{username === undefined ? "Unnamed" : username.userName}</a></Link></span></div>}
-           {isNftOwner && <div className="dark:text-[#e5e8eb]">Owned by <span className="text-[#2081e2]">You</span></div>}
+           {isNftOwner && <div className="dark:text-[#e5e8eb]">Owned by <span className="text-[#2081e2]"><Link href={"/profile/" + profileRedirect}><a>You</a></Link></span></div>}
            <div className="flex items-center">
              <BsFillHeartFill className="text-[gray] text-[20px]"/> 
              <p className="ml-[10px] text-[rgba(0,0,0,0.5)] dark:text-[#e5e8eb]">168 favorites</p>
@@ -215,9 +216,10 @@ useEffect(() => {
             <div className="text-[30px] font-semibold dark:text-[#d3d5d7]">{price}</div>
           </div>
 
-          {!isListingOwner && <button onClick={() => buyNow()} className="bg-[#2081e2] hover:bg-[#2b87e3] text-white mt-[5px] w-full p-[15px] text-[16px] rounded-lg font-semibold flex items-center justify-center">
-            <MdAccountBalanceWallet className="text-[24px] mr-[10px]"/>
-            <p>Buy now</p>
+          {!isListingOwner && <button onClick={() => {trackPromise(buyNow())}} className="bg-[#2081e2] hover:bg-[#2b87e3] text-white mt-[5px] w-full p-[15px] text-[16px] rounded-lg font-semibold flex items-center justify-center">
+          {!promiseInProgress && <div className="flex"> <MdAccountBalanceWallet className="text-[24px] mr-[10px]"/>
+              <p>Buy now</p></div>}
+            {promiseInProgress && <MoonLoader size={19} color={"#ffff"}/>}
           </button>}
           {isListingOwner && <button onClick={() => cancelListing()} className="bg-[#2081e2] hover:bg-[#2b87e3] text-white mt-[5px] w-full p-[15px] text-[16px] rounded-lg font-semibold flex items-center justify-center">
             <ImCross className="text-[24px] mr-[10px]"/>

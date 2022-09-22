@@ -16,6 +16,7 @@ function UserInfo({nfts, listings, userData}) {
   const [edit, setEdit] = useState(false)
   const [newUserName, setNewUserName] = useState("")
   const [myUserName, setMyUserName] = useState(userData[0].userName)
+  const [isOwner, setIsOwner] = useState(false)
   
   const router = useRouter();
   const { wallet } = router.query;
@@ -41,14 +42,14 @@ function UserInfo({nfts, listings, userData}) {
       }
       setNewListings(filteredListings)
     }
-  }, [nfts, listings])
+  }, [nfts, listings, wallet])
 
 
   useEffect(() => {
     if (listings !== undefined) {
       setCanRender(true)
     }
-  }, [listings])
+  }, [listings, wallet])
 
   const handleSubmit = (e) => {
     if (e.key === "Enter") {
@@ -61,10 +62,14 @@ function UserInfo({nfts, listings, userData}) {
     const result = await client.patch(wallet).set({userName: newUserName}).commit()
     setMyUserName(newUserName)
   }
-
+  useEffect(() => {
+    if (wallet === address) {
+      setIsOwner(true)
+    }
+  }, [address, wallet])
 
   return (
-    <div className="px-[15px] font-poppins">
+    <div className="px-[15px] font-poppins pb-[20px]">
         <div className="flex w-full justify-end py-[25px]">
             <BsShareFill className="text-[20px]"/>
             <BsThreeDots className="ml-[30px] text-[20px]"/>
@@ -79,7 +84,7 @@ function UserInfo({nfts, listings, userData}) {
              autoFocus
              className="outline-none w-[120px] placeholder:text-[24px] h-[36px] mr-[10px] text-[24px]">
             </input>}
-            <FiEdit2 onClick={() => setEdit(prev => !prev)} className="cursor-pointer"/>
+            {isOwner && <FiEdit2 onClick={() => setEdit(prev => !prev)} className="cursor-pointer"/>}
           </div>
             <p className="text-[14px] text-[rgba(0,0,0,0.5)] dark:text-white">Joined September 2021</p>
         </div>

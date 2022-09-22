@@ -2,6 +2,7 @@ import React from "react";
 import { useRouter } from "next/router";
 import { useMemo, useEffect, useState } from "react";
 import Header from "../../components/Header/Header";
+import Footer from "../../components/Footer/Footer";
 import { client } from "../../lib/sanityClient";
 import CollectionData from "../../components/Collections/CollectionData";
 import { useTheme } from "next-themes";
@@ -9,7 +10,27 @@ import { useMarketplace } from "@thirdweb-dev/react";
 import { useNFTCollection } from "@thirdweb-dev/react";
 import axios from "axios";
 
-function Collection() {
+export async function getServerSideProps() {
+  const query = `*[_type == "marketItems"]  {
+    title,
+    "imageUrl": profileImage.asset->url,
+    contractAddress
+  }`;
+
+  let res = await axios.get(
+    "https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?CMC_PRO_API_KEY=8cdc4749-80b3-4fd7-8076-1a337c193e78"
+  );
+
+  const data = await client.fetch(query);
+  return {
+    props: {
+      data,
+      ethPrice: res.data,
+    },
+  };
+}
+
+function Collection({ data, ethPrice }) {
   const router = useRouter();
   const { theme, setTheme } = useTheme();
   const { collectionId } = router.query;
@@ -18,10 +39,19 @@ function Collection() {
   const [collection, setCollection] = useState([]);
   const [volumeData, setVolumeData] = useState([]);
   const [totalVolume, setTotalVolume] = useState(0);
+  const [titles, setTitles] = useState([]);
 
   const marketplace = useMarketplace(
     "0x1De7A966aa3FC7d43bfA7Ae450AEF02600E9d5Db"
   );
+
+  useEffect(() => {
+    let titleArray = [];
+    for (let i = 0; i < data.length; i++) {
+      titleArray.push(data[i].title);
+    }
+    setTitles(titleArray);
+  }, [data, collectionId]);
 
   const fetchVolume = async () => {
     axios
@@ -33,7 +63,7 @@ function Collection() {
 
   useEffect(() => {
     fetchVolume();
-  }, []);
+  }, [collectionId]);
 
   const getListings = async () => {
     try {
@@ -46,7 +76,7 @@ function Collection() {
 
   useEffect(() => {
     getListings();
-  }, []);
+  }, [collectionId]);
 
   const nftCollection = useNFTCollection(collectionId);
 
@@ -98,11 +128,17 @@ function Collection() {
 
   useEffect(() => {
     getNfts();
-  }, []);
+  }, [collectionId]);
 
   return (
     <div>
-      <Header theme={theme} setTheme={setTheme} />
+      <Header
+        theme={theme}
+        setTheme={setTheme}
+        titles={titles}
+        fullData={data}
+        etherPrice={ethPrice.data[1].quote.USD.price}
+      />
       <CollectionData
         bannerImageUrl={
           collection == undefined ? "" : collection.bannerImageUrl
@@ -116,6 +152,7 @@ function Collection() {
         volumeTraded={volumeData == undefined ? "" : totalVolume}
         listings={listings == undefined ? [] : listings}
       />
+      <Footer />
     </div>
   );
 }

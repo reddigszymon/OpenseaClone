@@ -5,13 +5,37 @@ import NotableDrops from "../components/NotableDrops/NotableDrops";
 import TopCollections from "../components/TopCollections/TopCollections";
 import MeetOpensea from "../components/MeetOpensea/MeetOpensea";
 import Footer from "../components/Footer/Footer";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { client } from "../lib/sanityClient";
 import { useAddress } from "@thirdweb-dev/react";
+import axios from "axios";
 
-export default function Home() {
+export async function getServerSideProps() {
+  const query = `*[_type == "marketItems"]  {
+    title,
+    "imageUrl": profileImage.asset->url,
+    contractAddress
+  }`;
+
+  let res = await axios.get(
+    "https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?CMC_PRO_API_KEY=8cdc4749-80b3-4fd7-8076-1a337c193e78"
+  );
+
+  const data = await client.fetch(query);
+  return {
+    props: {
+      data,
+      ethPrice: res.data,
+    },
+  };
+}
+
+export default function Home({ data, ethPrice }) {
   const account = useAddress();
   const { theme, setTheme } = useTheme();
+  const [titles, setTitles] = useState([]);
+
+  // console.log(ethPrice.data[1].quote.USD.price);
 
   useEffect(() => {
     if (!account) return;
@@ -28,10 +52,24 @@ export default function Home() {
     addAddress();
   }, [account]);
 
+  useEffect(() => {
+    let titleArray = [];
+    for (let i = 0; i < data.length; i++) {
+      titleArray.push(data[i].title);
+    }
+    setTitles(titleArray);
+  }, [data]);
+
   return (
     <div className="relative w-full h-screen dark:bg-[#202225]">
       <div>
-        <Header theme={theme} setTheme={setTheme} />
+        <Header
+          theme={theme}
+          setTheme={setTheme}
+          titles={titles}
+          fullData={data}
+          etherPrice={ethPrice.data[1].quote.USD.price}
+        />
         <Hero theme={theme} setTheme={setTheme} />
         <NotableDrops theme={theme} setTheme={setTheme} />
         <TopCollections theme={theme} setTheme={setTheme} />

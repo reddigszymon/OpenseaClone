@@ -12,12 +12,36 @@ function Footer() {
   return (
     <>
         <div className="flex justify-center items-center text-2xl sm:text-3xl bg-[#1868b7] dark:bg-[#1b1e21] gap-[.75em] h-[200px]">
-            <div className={styles.box}><BsTwitter className={styles.icon}/></div>
-            <div className={styles.box}><AiOutlineInstagram className={styles.icon}/></div>
-            <div className={styles.box}><FaDiscord className={styles.icon}/></div>
-            <div className={styles.box}><FaRedditAlien className={styles.icon}/></div>
-            <div className={styles.box}><BsYoutube className={styles.icon}/></div>
-            <div className={styles.box}><FaTiktok className={styles.icon}/></div>
+          <a href="https://twitter.com/opensea?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor">
+            <div className={styles.box}>
+              <BsTwitter className={styles.icon}/>
+            </div>
+          </a>
+          <a href="https://www.instagram.com/opensea/">
+            <div className={styles.box}>
+              <AiOutlineInstagram className={styles.icon}/>
+            </div>
+          </a>
+          <a href="https://discord.com/invite/opensea">
+            <div className={styles.box}>
+              <FaDiscord className={styles.icon}/>
+            </div>
+          </a>
+          <a href="https://www.reddit.com/r/opensea/">
+            <div className={styles.box}>
+              <FaRedditAlien className={styles.icon}/>
+            </div>
+          </a>
+          <a href="https://www.youtube.com/c/OpenSeaTV">
+            <div className={styles.box}>
+              <BsYoutube className={styles.icon}/>
+            </div>
+          </a>
+          <a href="https://www.tiktok.com/@opensea">
+            <div className={styles.box}>
+              <FaTiktok className={styles.icon}/>
+            </div>
+          </a>
         </div>
     </>
   )

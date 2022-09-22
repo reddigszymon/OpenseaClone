@@ -39,7 +39,7 @@ function ExploreCollections() {
     ))
 
   return (
-    <div className="font-poppins px-[20px]">
+    <div className="font-poppins px-[20px] pb-[20px]">
         <h1 className='text-[28px] font-bold my-[50px]'>Explore collections</h1>
         <div className="flex flex-wrap gap-[20px]">
           {children}

@@ -7127,6 +7127,11 @@ react-only-when@^1.0.2:
   resolved "https://registry.yarnpkg.com/react-only-when/-/react-only-when-1.0.2.tgz#a8a79b48dd6cfbd91ddc710674a94153e88039d3"
   integrity sha512-agE6l3L6bqaVuwNtjihTQ36M+VBfPS63KOzcNL4ZTmlwSxQPvhzIqmBWfiol0/wLYmKxCcBqgXkEJpvj5Kob8Q==
 
+react-promise-tracker@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/react-promise-tracker/-/react-promise-tracker-2.1.0.tgz#a8ac2ca5322ca60f83fa7a00ad9d99bfbbdb8434"
+  integrity sha512-1LQSGAnFF4o++iPFgeBrMpS+ZHQg8ZGl9Zuf70v+OoLxuOnUeLCP7ugma+InBCUZzPnSLyWTLt/jyW+FAy5ELQ==
+
 react-remove-scroll-bar@^2.3.3:
   version "2.3.3"
   resolved "https://registry.yarnpkg.com/react-remove-scroll-bar/-/react-remove-scroll-bar-2.3.3.tgz#e291f71b1bb30f5f67f023765b7435f4b2b2cd94"
@@ -7173,6 +7178,11 @@ react-slideshow-image@^4.0.4:
   dependencies:
     "@tweenjs/tween.js" "^18.6.4"
     resize-observer-polyfill "^1.5.1"
+
+react-spinners@^0.13.4:
+  version "0.13.4"
+  resolved "https://registry.yarnpkg.com/react-spinners/-/react-spinners-0.13.4.tgz#20f7435e5cb3a2bde23110efa8b7dfbe485373e9"
+  integrity sha512-V6IURjYOwomhdngMfuVxBp4utCF6v21sjQ6r4K2JoKl8fwXZp1UeHMBLf+2SU+cts8hAVj9rHOJ8kdT5UqqaJw==
 
 react-style-singleton@^2.2.1:
   version "2.2.1"

@@ -9,8 +9,29 @@ import Footer from "../../components/Footer/Footer";
 import { useMarketplace } from "@thirdweb-dev/react";
 import { useNFTCollection } from "@thirdweb-dev/react";
 import { useAddress } from "@thirdweb-dev/react";
+import axios from "axios";
 
-function nftPage() {
+export async function getServerSideProps() {
+  const query = `*[_type == "marketItems"]  {
+    title,
+    "imageUrl": profileImage.asset->url,
+    contractAddress
+  }`;
+
+  let res = await axios.get(
+    "https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?CMC_PRO_API_KEY=8cdc4749-80b3-4fd7-8076-1a337c193e78"
+  );
+
+  const data = await client.fetch(query);
+  return {
+    props: {
+      data,
+      ethPrice: res.data,
+    },
+  };
+}
+
+function nftPage({ data, ethPrice }) {
   const address = useAddress();
   const router = useRouter();
   const { theme, setTheme } = useTheme();
@@ -21,6 +42,15 @@ function nftPage() {
   const [listings, setListings] = useState([]);
   const [collection, setCollection] = useState([]);
   const [user, setUser] = useState("");
+  const [titles, setTitles] = useState([]);
+
+  useEffect(() => {
+    let titleArray = [];
+    for (let i = 0; i < data.length; i++) {
+      titleArray.push(data[i].title);
+    }
+    setTitles(titleArray);
+  }, [data]);
 
   const marketplace = useMarketplace(
     "0x1De7A966aa3FC7d43bfA7Ae450AEF02600E9d5Db"
@@ -47,11 +77,11 @@ function nftPage() {
 
   useEffect(() => {
     getListings();
-  }, [address]);
+  }, [address, collectionAddress]);
 
   useEffect(() => {
     getNfts();
-  }, [address]);
+  }, [address, collectionAddress]);
 
   const nft = nfts.filter((nft) => nft.metadata.name === id);
   const listing = listings.filter((listing) => listing.asset.name === id);
@@ -84,11 +114,17 @@ function nftPage() {
 
   useMemo(() => {
     fetchUserData();
-  }, [owner]);
+  }, [owner, collectionAddress]);
 
   return (
     <>
-      <Header theme={theme} setTheme={setTheme} />
+      <Header
+        theme={theme}
+        setTheme={setTheme}
+        titles={titles}
+        fullData={data}
+        etherPrice={ethPrice.data[1].quote.USD.price}
+      />
       <div className="lg:hidden">
         <NFTPageSmall
           nft={nft}

@@ -1,41 +1,35 @@
 import React from 'react'
-import axios from 'axios'
-import { formatEther } from "@ethersproject/units";
 import {IoIosArrowBack} from "react-icons/io"
 import greenCircle from "../../assets/greenCircle.png"
 import Image from "next/image"
-import {useWeb3React} from "@web3-react/core"
 import {useState, useEffect, useRef} from "react"
 import {FaEthereum} from 'react-icons/fa'
 import {BsThreeDotsVertical} from 'react-icons/bs'
 import {IoIosCopy} from 'react-icons/io'
 import {AiOutlinePlusCircle} from 'react-icons/ai'
 import AddFundsComponent from './AddFundsComponent'
-import { useWeb3 } from "@3rdweb/hooks"
 import {useAddress, useSDK} from "@thirdweb-dev/react"
 
 
-function WalletBalance({ setWalletOpen}) {
-    // const [ethBalance, setEthBalance] = useState()
-    const [ethPrice, setEthPrice] = useState()
+function WalletBalance({ setWalletOpen, etherPrice }) {
     const [showCopy, setShowCopy] = useState(false)
     const [openSlide, setopenSlide] = useState("")
     const [showAddFunds, setShowAddFunds] = useState(false);
     const [balance, setBalance] = useState(0)
 
-    // const {address, balance} = useWeb3()
     const sdk = useSDK()
     async function getBalance() {
         const myBalance = await sdk.wallet.balance();
         setBalance(myBalance.displayValue)
     }
 
+    
+    
+    const address = useAddress()
+
     useEffect(() => {
-        if (!sdk) return
         getBalance()
     }, [address])
-
-    const address = useAddress()
 
     const styles = {
         wrapper: `absolute h-full w-full`,
@@ -64,23 +58,8 @@ function WalletBalance({ setWalletOpen}) {
 
     }
 
-    console.log(balance)
     const catMenu = useRef(null)
 
-    // useEffect(() => {
-    //     setEthBalance(balance)
-    // }, [address])
-
-
-    async function fetchEthPrice() {
-        try {
-            let res = await axios.get('http://localhost:4000').then(response => setEthPrice(response.data.data[1].quote.USD.price))
-        } catch (error) {
-            console.log(error)
-        }
-    }
-
-    fetchEthPrice()
 
     const closeOpenMenus = (e)=>{
         if(catMenu.current && openSlide && !catMenu.current.contains(e.target)){
@@ -110,7 +89,7 @@ function WalletBalance({ setWalletOpen}) {
         <div className={styles.balanceContainer}>
             <div className={styles.totalBalanceContainer}>
                 <p className={styles.totalBalance}>Total balance</p>
-                <h3 className={styles.totalBalanceUsd}>{ethPrice === undefined ? "..." : "$" + (balance.formatted*ethPrice).toFixed(2) + " " + "USD"}</h3>
+                <h3 className={styles.totalBalanceUsd}>{balance === undefined ? "..." : (parseFloat(etherPrice) * balance).toFixed(2) + "$"}</h3>
             </div>
             <button className={styles.addFundsButton} onClick={() => setShowAddFunds(true)}>Add Funds</button>
         </div>
@@ -125,7 +104,7 @@ function WalletBalance({ setWalletOpen}) {
             <div className={styles.topContainerLayout}>
                 <div className={styles.ethBalanceRight}>
                     <h2 className={styles.ethAmountRight}>{balance === undefined ? "..." : parseFloat(balance).toFixed(4)}</h2>
-                    <p className={styles.usdAmountRight}>{ethPrice === undefined ? "..." : "$" + (ethPrice*balance.formatted).toFixed(2) + " " + "USD"}</p>
+                    <p className={styles.usdAmountRight}>{(balance === undefined ? "..." : parseFloat(etherPrice) * balance).toFixed(2) + " USD"}</p>
                 </div>
  
                 {!openSlide &&<BsThreeDotsVertical className={styles.threeDots} onClick={() => setopenSlide(true)}/>}

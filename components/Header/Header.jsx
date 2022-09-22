@@ -16,9 +16,9 @@ import Link from "next/link"
 import Router from 'next/router'
 import { useTheme  } from "next-themes";
 import {useAddress, useMetamask} from "@thirdweb-dev/react"
+import BigSearch from "./BigSearch"
 
-
-function Header() {
+function Header({titles, fullData, etherPrice}) {
 
     const [navbarOpen, setNavbarOpen] = useState(false)
     const [smallSearch, setSmallSearch] = useState(false)
@@ -74,11 +74,11 @@ function Header() {
                 <div className={styles.searchIconSpace}>
                     <AiOutlineSearch className={styles.searchIconColor}/>
                 </div>
-                <input className={styles.input} placeholder="Search items, collections and accounts"></input>
+                <BigSearch titles={titles} fullData={fullData}/>
             </div>
             <div className={styles.bigScreenNavbar}>
                 <Link href='/explore-collections'><span className={styles.largeText}>Collections</span></Link>
-                <div onClick={() => Router.push({pathname: '/stats'})} className={styles.largeText}>Stats</div>
+                <a href="https://opensea.io/learn"><div className={styles.largeText}>Resources</div></a>
                 <div onClick={() => Router.push({pathname: '/create'})} className={styles.largeText}>Create</div>
                 <MoonIcon theme={theme} setTheme={setTheme}/>
             </div>
@@ -96,7 +96,7 @@ function Header() {
                 <MdOutlineAccountBalanceWallet onClick={address ? () => setWalletOpen(prev => !prev) : () => connectWallet('injected')} className={styles.walletNoConnection}/>
             </div>
                 <AiOutlineSearch className={styles.bigScreenSearchIcon} onClick={() => setSmallSearch(prev => !prev)}/>
-                {smallSearch && <SmallSearch setSmallSearch={setSmallSearch} />}
+                {smallSearch && <SmallSearch setSmallSearch={setSmallSearch} titles={titles} fullData={fullData}/>}
             <div className={styles.bigScreenHidden} onClick={() => setNavbarOpen(prev => !prev)}>
                 {
                 navbarOpen? 
@@ -111,7 +111,7 @@ function Header() {
         {!walletOpen && <Navbar theme={theme} setTheme={setTheme} walletOpen={walletOpen} setWalletOpen={setWalletOpen}/>}
     </div>
     <div className={styles.walletStyling}>
-        {walletOpen && <WalletBalance walletOpen={walletOpen} setWalletOpen={setWalletOpen}/>}
+        {walletOpen && <WalletBalance etherPrice={etherPrice} walletOpen={walletOpen} setWalletOpen={setWalletOpen}/>}
     </div>
     </>
   )

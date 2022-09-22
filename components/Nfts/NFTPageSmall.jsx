@@ -22,6 +22,7 @@ function NFTPageSmall({nft, listing, collection, username, allNfts, allListings}
   const address = useAddress()
 
   const [isOwner, setIsOwner] = useState(false)
+  const [isNftOwner, setIsNftOwner] = useState(false)
   const [favourite, setFavourite] = useState(false)
   const [listingsFiltered, setListingsFiltered] = useState([])
   const [profileRedirect, setProfileRedirect] = useState()
@@ -82,7 +83,7 @@ function NFTPageSmall({nft, listing, collection, username, allNfts, allListings}
     } else {
       setIsOwner(false)
     }
-  }, [address, sellerAddress])
+  }, [address, sellerAddress, collectionAddress])
 
   useEffect(() => {
     if (allListings !== undefined) {
@@ -94,7 +95,7 @@ function NFTPageSmall({nft, listing, collection, username, allNfts, allListings}
         }
         setListingsFiltered(array)
     }
-}, [allListings, address])
+}, [allListings, address, collectionAddress])
 
 useEffect(() => {
   if (listing[0] !== undefined) {
@@ -103,7 +104,18 @@ useEffect(() => {
   if (nft[0] !== undefined) {
     setProfileRedirect(nft[0].owner)
   }
-}, [address, nft, listing])
+}, [address, nft, listing, collectionAddress])
+
+useEffect(() => {
+  if (nft[0] !== undefined) {
+    if (nft[0].owner === address) {
+      setIsNftOwner(true)
+    } else {
+      setIsNftOwner(false)
+    }
+  }
+  
+}, [address, nft, collectionAddress])
 
   return (
     <div className="p-[10px] font-poppins max-w-[600px] mx-auto">
@@ -151,7 +163,8 @@ useEffect(() => {
           </div>
         </div>
         <div className="mt-[20px] items-center flex justify-between">
-          <div className="dark:text-[#8a939b]">Owned by <span className="text-[#2081e2]"><Link href={"/profile/" + profileRedirect}><a>{username == undefined ? "" : username.userName}</a></Link></span></div>
+          {!isNftOwner && <div className="dark:text-[#8a939b]">Owned by <span className="text-[#2081e2]"><Link href={"/profile/" + profileRedirect}><a>{username == undefined ? "" : username.userName}</a></Link></span></div>}
+          {isNftOwner && <div className="dark:text-[#8a939b]">Owned by <span className="text-[#2081e2]"><Link href={"/profile/" + profileRedirect}><a>You</a></Link></span></div>}
           <div className="flex items-center">
             <BsFillHeartFill className="text-[gray] text-[20px]"/> 
             <p className="ml-[10px] text-[rgba(0,0,0,0.5)] dark:text-[#8a939b]">168 favorites</p>
