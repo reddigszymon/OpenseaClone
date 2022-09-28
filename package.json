@@ -26,6 +26,7 @@
     "cors": "^2.8.5",
     "ethers": "^5.7.0",
     "framer-motion": "^7.2.0",
+    "global": "^4.4.0",
     "http-proxy-middleware": "^2.0.6",
     "nanoid": "^4.0.0",
     "next": "12.2.5",
@@ -46,6 +47,7 @@
     "react-switch": "^7.0.0",
     "react-youtube": "^9.0.3",
     "styled-components": "^5.3.5",
+    "vercel": "^28.4.5",
     "web3": "^1.7.5",
     "web3modal": "^1.9.8"
   },
