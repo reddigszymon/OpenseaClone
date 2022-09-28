@@ -4,6 +4,8 @@ A fully responsive, functional and graphically pleasing clone of the most popula
 
 ![Logo](https://scontent-vie1-1.xx.fbcdn.net/v/t1.15752-9/309720161_3337564136472572_3293559803973002809_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=ae9488&_nc_ohc=kx2_dCE15rsAX81Sn_Z&_nc_ht=scontent-vie1-1.xx&oh=03_AVKhUSUiKXRBoHPGWEbhBWXfVMELB2nylOygj2FMqHNdtQ&oe=6359B5AC)
 
+[Live Demo](https://opensea-clone-pqk6.vercel.app/)
+
 ### White Mode
 
 ![App Screenshot](https://im5.ezgif.com/tmp/ezgif-5-1e825470cd.webp)
