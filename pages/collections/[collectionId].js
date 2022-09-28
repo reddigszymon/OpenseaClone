@@ -18,7 +18,7 @@ export async function getServerSideProps() {
   }`;
 
   let res = await axios.get(
-    `https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?CMC_PRO_API_KEY=8cdc4749-80b3-4fd7-8076-1a337c193e78`
+    `https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?CMC_PRO_API_KEY=${process.env.NEXT_PUBLIC_CMC_API_KEY}`
   );
 
   const data = await client.fetch(query);
@@ -56,7 +56,7 @@ function Collection({ data, ethPrice }) {
   const fetchVolume = async () => {
     axios
       .get(
-        `https://api-goerli.etherscan.io/api?module=account&action=txlist&contractaddress=${collectionId}&address=0x1De7A966aa3FC7d43bfA7Ae450AEF02600E9d5Db&startblock=0&endblock=99999999&sort=asc&apikey=JSNPEK1KPZ7Z7NEP2URAQX4DF2K2EFS17K`
+        `https://api-goerli.etherscan.io/api?module=account&action=txlist&contractaddress=${collectionId}&address=0x1De7A966aa3FC7d43bfA7Ae450AEF02600E9d5Db&startblock=0&endblock=99999999&sort=asc&apikey=${process.env.NEXT_PUBLIC_GOERLI_KEY}`
       )
       .then((res) => setVolumeData(res.data.result));
   };
