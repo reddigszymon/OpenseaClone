@@ -4,6 +4,10 @@ import {useAddress} from "@thirdweb-dev/react"
 import { useNFTCollection } from '@thirdweb-dev/react'
 import {client} from "../../lib/sanityClient"
 import toast, { Toaster } from 'react-hot-toast'
+import MoonLoader from "react-spinners/MoonLoader";
+import { usePromiseTracker } from "react-promise-tracker";
+import { trackPromise} from 'react-promise-tracker';
+import { useRouter } from 'next/router'
 
 function CreateNewItem() {
 
@@ -24,6 +28,9 @@ function CreateNewItem() {
     const [bannerText, setBannerText] = useState()
     const [thirdWebAddress, setThirdWebAddress] = useState()
     const [deployedCollection, setDeployedCollection] = useState(false)
+
+    const { promiseInProgress } = usePromiseTracker();
+    const router = useRouter()
 
     const collectionCreation = (toastHandler = toast) =>
     toastHandler.success(`Collection created successfully!`, {
@@ -238,14 +245,15 @@ function CreateNewItem() {
                         </div>
                 </div>
             </div>
-            <button onClick={() => deployCollection()} className="bg-[gray] hover:bg-[#a0a0a0] transition-all duration-[400ms] text-white w-full rounded-lg p-[10px] max-w-[600px] mb-[40px] mt-[20px]">
-                    Create Collection
+            <button onClick={() => {trackPromise(deployCollection())}} className="flex items-center justify-center bg-[gray] hover:bg-[#a0a0a0] transition-all duration-[400ms] text-white w-full rounded-lg p-[10px] max-w-[600px] mb-[40px] mt-[20px]">
+                    {!promiseInProgress && <p>Create Collection</p>}
+                    {promiseInProgress && <MoonLoader size={19} color={"#ffff"}/>}
             </button>
             <div className="mb-[40px] w-full flex flex-col items-center">
                 <div className="max-w-[600px] w-full">
                     <h2 className="font-semibold mb-[10px]">NFT Images<span className="ml-[5px] text-[red]">*</span></h2>
                     <p className="dark:text-[rgba(255,255,255,0.4)] text-[13px] text-[rgba(0,0,0,0.5)] mb-[5px]">File types supported: JPG, PNG, GIF, SVG. Max size: 100 MB</p>
-                    <p className="dark:text-[rgba(255,255,255,0.4)] text-[13px] text-[rgba(0,0,0,0.5)] mb-[5px]">Change the name of your files to match the ID of the NFTs!</p>
+                    <p className="dark:text-[rgba(255,255,255,0.4)] text-[13px] text-[rgba(0,0,0,0.5)] mb-[5px]">Change the name of your files to match the IDs of the NFTs!</p>
                         <input type="file" multiple="multiple" onChange={(event) => handleNftsChange(event)}/>
                     <div className="text-black dark:text-white">
                       {nftsText === undefined ? "" : nftsText.map(text => (
@@ -254,8 +262,9 @@ function CreateNewItem() {
                     </div>
                 </div>
             </div>
-            {deployedCollection &&  <button onClick={() => populateCollection()} className="bg-[rgb(79,21,255)] hover:bg-[rgb(103,59,236)] transition-all duration-[400ms] text-white w-full rounded-lg p-[10px] max-w-[600px] mb-[40px]">
-                    Populate collection with NFTs
+            {deployedCollection &&  <button onClick={() => {trackPromise(populateCollection())}} className="bg-[rgb(79,21,255)] hover:bg-[rgb(103,59,236)] transition-all duration-[400ms] text-white w-full rounded-lg p-[10px] max-w-[600px] mb-[40px] flex items-center justify-center">
+                    {!promiseInProgress && <p>Populate collection with NFTs</p>}
+                    {promiseInProgress && <MoonLoader size={19} color={"#ffff"}/>}
             </button>}
             {!deployedCollection && <button disabled className="cursor-not-allowed bg-[#fc4646] transition-all duration-[400ms] text-white w-full rounded-lg p-[10px] max-w-[600px] mb-[40px]">
                     Please create your collection to add NFTs...

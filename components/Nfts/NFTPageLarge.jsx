@@ -115,7 +115,7 @@ function NFTPageLarge({nft, listing, collection, username, allNfts, allListings,
         assetContractAddress: collectionAddress,
         tokenId: nft[0].metadata.id,
         startTimestamp: new Date(),
-        listingDurationInSeconds: 86400,
+        listingDurationInSeconds: 9999999999,
         quantity: 1,
         currencyContractAddress: "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
         buyoutPricePerToken: sellerPrice
@@ -208,6 +208,7 @@ useEffect(() => {
              <p className="ml-[10px] text-[rgba(0,0,0,0.5)] dark:text-[#e5e8eb]">168 favorites</p>
            </div>
          </div>
+
          {isListed && 
         <div className="border-[1px] rounded-lg p-[10px] mt-[20px] bg-[#fbfdff] dark:bg-[#303339] dark:border-0">
           <div className="text-[14px] text-[rgba(0,0,0,0.5)] dark:text-[#e5e8eb]">Current Price</div> 
@@ -216,33 +217,78 @@ useEffect(() => {
             <div className="text-[30px] font-semibold dark:text-[#d3d5d7]">{price}</div>
           </div>
 
-          {!isListingOwner && <button onClick={() => {trackPromise(buyNow())}} className="bg-[#2081e2] hover:bg-[#2b87e3] text-white mt-[5px] w-full p-[15px] text-[16px] rounded-lg font-semibold flex items-center justify-center">
-          {!promiseInProgress && <div className="flex"> <MdAccountBalanceWallet className="text-[24px] mr-[10px]"/>
-              <p>Buy now</p></div>}
-            {promiseInProgress && <MoonLoader size={19} color={"#ffff"}/>}
-          </button>}
-          {isListingOwner && <button onClick={() => cancelListing()} className="bg-[#2081e2] hover:bg-[#2b87e3] text-white mt-[5px] w-full p-[15px] text-[16px] rounded-lg font-semibold flex items-center justify-center">
-            <ImCross className="text-[24px] mr-[10px]"/>
-            <p>Cancel Listing</p>
-          </button>}
-        </div>}
+          {!isListingOwner &&
+          <div>
+            {!promiseInProgress && 
+            <button onClick={() => {trackPromise(buyNow())}} className="bg-[#2081e2] hover:bg-[#2b87e3] text-white mt-[5px] w-full p-[15px] text-[16px] rounded-lg font-semibold flex items-center justify-center">
+              <MdAccountBalanceWallet className="text-[24px] mr-[10px]"/>
+              <p>Buy now</p>
+            </button>
+            }
+            {promiseInProgress &&
+            <button onClick={() => {trackPromise(buyNow())}} disabled className="bg-[#2081e2] cursor-not-allowed text-white mt-[5px] w-full p-[15px] text-[16px] rounded-lg font-semibold flex items-center justify-center">
+              <MoonLoader size={19} color={"#ffff"}/>
+            </button>
+            }
+          </div>
+          }
+
+          {isListingOwner && 
+          <div>
+            {!promiseInProgress &&
+            <button onClick={() => {trackPromise(cancelListing())}} className="bg-[#2081e2] hover:bg-[#2b87e3] text-white mt-[5px] w-full p-[15px] text-[16px] rounded-lg font-semibold flex items-center justify-center">
+              <div className="flex">
+                <ImCross className="text-[24px] mr-[10px]"/>
+                <p>Cancel Listing</p>
+              </div>
+            </button>
+            }
+
+            {promiseInProgress &&
+            <button disabled className="bg-[#2081e2] cursor-not-allowed text-white mt-[5px] w-full p-[15px] text-[16px] rounded-lg font-semibold flex items-center justify-center">
+              <MoonLoader size={19} color={"#ffff"}/>
+            </button>
+            }
+          </div>
+          }
+        </div>
+        }
+
         {!isListed && 
         <div className="border-[1px] rounded-lg p-[10px] mt-[20px] bg-[#fbfdff] dark:bg-[#303339] dark:border-0 ">
           <div className="text-[18px] text-[rgba(0,0,0,0.5)] dark:text-[#e5e8eb]">Item is not listed</div> 
-          {!isNftOwner && <button className="bg-[#2081e2] hover:bg-[#2b87e3] text-white mt-[5px] w-full p-[15px] text-[16px] rounded-lg font-semibold flex items-center justify-center">
-            <MdAccountBalanceWallet className="text-[24px] mr-[10px]"/>
-            <p>Make Offer</p>
-          </button>}
+          
+          {!isNftOwner && 
+
+          <button className="bg-[gray] hover:bg-[#858585] cursor-default text-white mt-[5px] w-full p-[15px] text-[16px] rounded-lg font-semibold flex items-center justify-center">
+            <p>NFT is not listed</p>
+          </button>
+          
+          }
+
           {isNftOwner && 
+
           <div className="flex justify-between items-center mt-[5px]">
             <input onChange={(e) => setSellerPrice(e.target.value)} placeholder="Price of NFT" className="border-2 dark:border-0 w-[20%] rounded-l-lg h-[48px] p-[10px] text-[14px] placeholder:text-center outline-none placeholder:text-[#434444] dark:text-[#e5e8eb]"/>
-            <button onClick={() => createListing()} className="bg-[#2081e2] hover:bg-[#2b87e3] text-white  w-[80%] p-[12px] text-[16px] rounded-r-lg font-semibold flex items-center justify-center">
-              <MdAccountBalanceWallet className="text-[24px] mr-[10px]"/>
-              <p>Sell</p>
+            {promiseInProgress && 
+            <button disabled className="cursor-not-allowed bg-[#2081e2] text-white w-[80%] p-[12px] text-[16px] rounded-r-lg font-semibold flex items-center justify-center">
+              <MoonLoader size={19} color={"#ffff"}/>
             </button>
+            }
+            {!promiseInProgress && 
+            <button onClick={() => {trackPromise(createListing())}} className="bg-[#2081e2] hover:bg-[#2b87e3] text-white w-[80%] p-[12px] text-[16px] rounded-r-lg font-semibold flex items-center justify-center">
+              <div className="flex">
+                <MdAccountBalanceWallet className="text-[24px] mr-[10px]"/>
+                <p>Sell Now</p>
+              </div>
+            </button>
+            }
           </div>
+
           }
-        </div>}
+        </div>
+        }
+
         <ItemActivity />
         </div>
     </div>

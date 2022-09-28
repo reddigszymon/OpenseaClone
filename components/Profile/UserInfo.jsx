@@ -69,7 +69,7 @@ function UserInfo({nfts, listings, userData}) {
   }, [address, wallet])
 
   return (
-    <div className="px-[15px] font-poppins pb-[20px]">
+    <div className="px-[15px] font-poppins pb-[20px] mb-[208px]">
         <div className="flex w-full justify-end py-[25px]">
             <BsShareFill className="text-[20px]"/>
             <BsThreeDots className="ml-[30px] text-[20px]"/>

@@ -11,7 +11,7 @@ const styles = {
 function Footer() {
   return (
     <>
-        <div className="flex justify-center items-center text-2xl sm:text-3xl bg-[#1868b7] dark:bg-[#1b1e21] gap-[.75em] h-[200px]">
+        <div className="mt-auto flex justify-center items-center text-2xl sm:text-3xl bg-[#1868b7] dark:bg-[#1b1e21] gap-[.75em] h-[200px]">
           <a href="https://twitter.com/opensea?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor">
             <div className={styles.box}>
               <BsTwitter className={styles.icon}/>

@@ -52,12 +52,12 @@ function SmallSearch({setSmallSearch, titles, fullData}) {
         const searchDivs = imageArray.map((image, index) => (
           <div style={{top: (index+1)*76 + "px"}}
           onClick={() => Router.push({pathname: `/collections/${image[2]}`})} 
-          className="bg-white w-full flex items-center justify-start fixed h-[5rem] z-50 left-0 border-[1px]">
+          className="bg-white w-full flex items-center justify-start fixed h-[5rem] z-50 left-0 border-[1px] dark:bg-[rgb(4,17,29)] dark:border-none">
           <div className="flex items-center ml-[30px]">
             <div className="rounded-full overflow-hidden h-[60px] w-[60px] mr-[20px]">
               <img src={image[1]} />
             </div>
-            <p className="text-black text-[20px] font-semibold font-poppins">{image[0]}</p>
+            <p className="text-black text-[20px] font-semibold font-poppins dark:text-white">{image[0]}</p>
           </div>
         </div>
         ))

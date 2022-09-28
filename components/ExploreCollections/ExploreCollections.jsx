@@ -4,29 +4,9 @@ import {useAddress} from "@thirdweb-dev/react"
 import {client} from "../../lib/sanityClient"
 import Router from 'next/router'
 
-function ExploreCollections() {
-
-    const [collection, setCollection] = useState([])
-    const address = useAddress()
-
-    const fetchCollectionData = async () => {
-        const query = `*[_type == "marketItems"] {
-          "imageUrl": profileImage.asset->url,
-          "bannerImageUrl": bannerImage.asset->url,
-          contractAddress,
-          title,
-        }`;
-    
-        const collectionData = await client.fetch(query);
-        setCollection(collectionData);
-      };
-
-    useMemo(() => {
-    fetchCollectionData();
-    }, [address]);
-
-    
-    const children = collection.map(item => (
+function ExploreCollections({data}) {
+   
+    const children = data.map(item => (
         <div className="md:w-[48%] xl:w-[32%] 2xl:w-[24%]"
         onClick={() => {
           Router.push({

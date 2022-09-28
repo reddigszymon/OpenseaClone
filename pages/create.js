@@ -12,7 +12,7 @@ export async function getServerSideProps() {
   }`;
 
   let res = await axios.get(
-    "https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?CMC_PRO_API_KEY=8cdc4749-80b3-4fd7-8076-1a337c193e78"
+    `https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?CMC_PRO_API_KEY=${process.env.NEXT_PUBLIC_CMC_API_KEY}`
   );
 
   const data = await client.fetch(query);
