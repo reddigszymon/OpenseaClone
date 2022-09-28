@@ -71,6 +71,7 @@ in your studio directory.
 - Track all of the NFTs you own
 - Ability to favourite NFTs
 - Working Search Bar
+- Edit your profile avatar and banner
 
 ## Create your own collection
 
