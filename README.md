@@ -1,34 +1,86 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Opensea Clone
 
-## Getting Started
+A fully responsive, functional and graphically pleasing clone of the most popular NFT marketplace. Gives you the ability to browse, sell, purchase NFTs and even create your own collections at the push of one button.
 
-First, run the development server:
+![Logo](https://scontent-vie1-1.xx.fbcdn.net/v/t1.15752-9/309720161_3337564136472572_3293559803973002809_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=ae9488&_nc_ohc=kx2_dCE15rsAX81Sn_Z&_nc_ht=scontent-vie1-1.xx&oh=03_AVKhUSUiKXRBoHPGWEbhBWXfVMELB2nylOygj2FMqHNdtQ&oe=6359B5AC)
+
+### White Mode
+
+![App Screenshot](https://im5.ezgif.com/tmp/ezgif-5-1e825470cd.webp)
+
+### Dark Mode
+
+![App Screenshot](https://im5.ezgif.com/tmp/ezgif-5-eab2c7ac63.webp)
+
+## Installation
+
+Clone the repository
 
 ```bash
-npm run dev
-# or
+  git clone https://github.com/reddigszymon/OpenseaClone.git
+```
+
+Change the path to projects directory and install packages with yarn install
+
+```bash
+cd OpenseaClone
+yarn install
+```
+
+Open up a second terminal, change the directory to studio and install remaining packages with yarn install
+
+```bash
+cd studio
+yarn install
+```
+
+To run this project, you will need to add the following environment variables to your .env.local file
+
+`NEXT_PUBLIC_SANITY_PROJECT_ID` - project Id of your sanity project
+
+`NEXT_PUBLIC_SANITY_TOKEN` - token of your sanity project
+
+`NEXT_PUBLIC_CMC_API_KEY` - coinmarketcap API key
+
+`NEXT_PUBLIC_GOERLI_KEY` - etherscan goerli API key
+
+After the environment variables have been added, you can run start the project by running
+
+```bash
 yarn dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+in your main directory and
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+```bash
+sanity start
+```
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+in your studio directory.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+## Features
 
-## Learn More
+- Light/dark mode toggle
+- Browse your favourite NFT collections
+- Purchase NFTs, sell your NFTs and cancel your own listings
+- Fully functional on the Goerli Ethereum Testnet
+- Create your own collections
+- Check your wallet balance in both Ethereum and USD
+- Track all of the NFTs you own
+- Ability to favourite NFTs
 
-To learn more about Next.js, take a look at the following resources:
+## Create your own collection
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+First upload head to the Create tab, fill out the Collection Name, Collection Description and upload the Banner Image and The Avatar Image of the NFT collection.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+After that hit _Create Collection_. After the Collection has been created, upload all the NFTs - please name every single NFT using the ID of the NFT. After you upload all the NFTs hit _Populate Collection with NFTs_!
 
-## Deploy on Vercel
+![App Screenshot](https://im5.ezgif.com/tmp/ezgif-5-3d89b7764d.gif)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Remember to connect your metamask wallet and accept the incoming signatures.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+After this process you should see the NFTs appear in your profile, and the NFT collections under _Collections_.
+
+## Project assistance
+
+If you want to say **thank you** and/or support active development of `OpenSea Clone` please add a github star to the project!
