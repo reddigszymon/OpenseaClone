@@ -56,7 +56,7 @@ function Collection({ data, ethPrice }) {
   const fetchVolume = async () => {
     axios
       .get(
-        `https://api-goerli.etherscan.io/api?module=account&action=txlist&contractaddress=${collectionId}&address=0x1De7A966aa3FC7d43bfA7Ae450AEF02600E9d5Db&startblock=0&endblock=99999999&sort=asc&apikey=${process.env.NEXT_PUBLIC_GOERLI_KEY}`
+        `https://api-goerli.etherscan.io/api?module=account&action=txlist&contractaddress=${collectionId}&address=0x1De7A966aa3FC7d43bfA7Ae450AEF02600E9d5Db&startblock=0&endblock=99999999&sort=asc&apikey=JSNPEK1KPZ7Z7NEP2URAQX4DF2K2EFS17K`
       )
       .then((res) => setVolumeData(res.data.result));
   };
