@@ -70,6 +70,7 @@ in your studio directory.
 - Check your wallet balance in both Ethereum and USD
 - Track all of the NFTs you own
 - Ability to favourite NFTs
+- Working Search Bar
 
 ## Create your own collection
 
