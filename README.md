@@ -79,7 +79,7 @@ First upload head to the Create tab, fill out the Collection Name, Collection De
 
 After that hit _Create Collection_. After the Collection has been created, upload all the NFTs - please name every single NFT using the ID of the NFT. After you upload all the NFTs hit _Populate Collection with NFTs_!
 
-![App Screenshot](https://im5.ezgif.com/tmp/ezgif-5-3d89b7764d.gif)
+![App Screenshot](https://i.postimg.cc/yxNx8Qsd/Create-Collection.gif)
 
 Remember to connect your metamask wallet and accept the incoming signatures.
 
