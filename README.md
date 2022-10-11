@@ -8,11 +8,11 @@ A fully responsive, functional and graphically pleasing clone of the most popula
 
 ### White Mode
 
-![App Screenshot](https://im5.ezgif.com/tmp/ezgif-5-1e825470cd.webp)
+![App Screenshot]([https://im5.ezgif.com/tmp/ezgif-5-1e825470cd.webp](https://scontent-vie1-1.xx.fbcdn.net/v/t1.15752-9/310862137_507299590925032_4585193234279014187_n.png?_nc_cat=107&ccb=1-7&_nc_sid=ae9488&_nc_ohc=iek7NjOJeVcAX80zCdT&_nc_ht=scontent-vie1-1.xx&oh=03_AVIV-Te3CJaqD2NEPZ2plG5sMzBkyLTUsbx4EHINKLeVCQ&oe=636C4543))
 
 ### Dark Mode
 
-![App Screenshot](https://im5.ezgif.com/tmp/ezgif-5-eab2c7ac63.webp)
+![App Screenshot]([https://im5.ezgif.com/tmp/ezgif-5-eab2c7ac63.webp](https://scontent-vie1-1.xx.fbcdn.net/v/t1.15752-9/310605803_684893619222074_6202230475256099787_n.png?_nc_cat=104&ccb=1-7&_nc_sid=ae9488&_nc_ohc=igSHAcnXbnkAX9mSOLx&_nc_ht=scontent-vie1-1.xx&oh=03_AVLPPjgIhHUI3KkCnujhr2V2PLeO-mWT9E1WZXhgKbM0ng&oe=636AFABB))
 
 ## Installation
 
