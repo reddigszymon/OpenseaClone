@@ -8,7 +8,7 @@ A fully responsive, functional and graphically pleasing clone of the most popula
 
 ### White Mode
 
-![App Screenshot](https://i.ibb.co/PWFKcDK/whitemode.png)
+![App Screenshot](https://i.postimg.cc/PfSSxCTV/whitemode.png)
 
 ### Dark Mode
 
